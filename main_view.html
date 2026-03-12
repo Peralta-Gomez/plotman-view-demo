@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<!--
+  © 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.
+-->
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shokudoraku Sales Dashboard</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Font Awesome for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#30a1af',
+            primaryDark: '#2b8f9c',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #f3f4f6;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .sidebar-transition {
+      transition: all 0.3s ease-in-out;
+    }
+    .chart-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gauge {
+      position: relative;
+      width: 60px;
+      height: 60px;
+    }
+  </style>
+</head>
+<body class="flex flex-col overflow-hidden w-[1920px] h-[1080px] mx-auto shadow-2xl relative bg-white">
+<!-- BEGIN: TopBar -->
+<header class="bg-white border-b border-gray-200 h-14 flex items-center justify-between px-6 z-20 shadow-sm flex-shrink-0" data-purpose="header">
+<div class="flex items-center gap-4">
+<img alt="Shokudoraku Logo" class="h-10 object-contain" src="img/logo.png"/>
+<span class="text-xl font-bold text-gray-800 hidden md:inline-block text-2xl">Data Analytics</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+<i class="fa-solid fa-bell text-gray-400 text-xl cursor-pointer hover:text-primary"></i>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-semibold text-gray-900">Admin User</p>
+<p class="text-[10px] text-gray-500 text-primary">Manager</p>
+</div>
+<div class="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+          AD
+        </div>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<div class="flex flex-1 overflow-hidden">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-48 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col sidebar-transition hidden md:flex h-full" data-purpose="sidebar">
+<nav class="flex-1 py-4 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-white bg-primary rounded-lg transition-colors" href="#">
+<i class="fa-solid fa-chart-line w-5"></i>
+<span class="font-medium">Sales Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors" href="#">
+<i class="fa-solid fa-magnifying-glass-chart w-5"></i>
+<span class="font-medium">Item Details</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors" href="#">
+<i class="fa-solid fa-boxes-stacked w-5"></i>
+<span class="font-medium">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors" href="#">
+<i class="fa-solid fa-file-invoice-dollar w-5"></i>
+<span class="font-medium">Survey</span>
+</a>
+</nav>
+<div class="p-3 border-t border-gray-100">
+<button class="flex items-center gap-3 px-3 py-2.5 text-gray-500 hover:text-red-600 w-full transition-colors">
+<i class="fa-solid fa-right-from-bracket w-5"></i>
+<span class="font-medium">Logout</span>
+</button>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
+<div class="grid grid-cols-12 gap-4 w-full flex-1">
+<!-- ROW 1: Overall Sales & Metrics & KPI Gauges -->
+<!-- TOP LEFT: Overall Sales Chart -->
+<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col max-h-[400px]" data-purpose="overall-sales-chart">
+<div class="flex justify-between items-center mb-3">
+<h2 class="text-lg font-bold text-gray-800">Overall Sales</h2>
+<select class="text-xs border-gray-300 rounded-md focus:ring-primary">
+<option>Year</option>
+<option>Month</option>
+<option>Week</option>
+</select>
+</div>
+<div class="chart-container flex-1 relative">
+<canvas id="salesChart"></canvas>
+</div>
+</section>
+<!-- MIDDLE: Metric Cards -->
+<section class="col-span-2 flex flex-col gap-3 max-h-[400px]" data-purpose="metric-summaries">
+<div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
+<p class="text-xs text-gray-500 font-medium uppercase tracking-wider">Avg Sales This Year</p>
+<p class="text-2xl font-bold text-gray-900 mt-1">¥400,000</p>
+</div>
+<div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
+<p class="text-xs text-gray-500 font-medium uppercase tracking-wider">Avg Expend / Transaction</p>
+<p class="text-2xl font-bold text-gray-900 mt-1">¥4,021</p>
+</div>
+<div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
+<p class="text-xs text-gray-500 font-medium uppercase tracking-wider">Avg Clients / Day</p>
+<p class="text-2xl font-bold text-gray-900 mt-1">70</p>
+</div>
+</section>
+<!-- TOP RIGHT: KPI Section -->
+<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col max-h-[400px]" data-purpose="kpi-section">
+<h2 class="text-lg font-bold text-gray-800 mb-4">KPI Tracking</h2>
+<div class="grid grid-cols-3 gap-y-4 gap-x-3 flex-1 content-center">
+<!-- KPI 1 -->
+<div class="flex flex-col items-center">
+<div class="relative w-20 h-20 mb-1"><canvas id="kpi1"></canvas><span class="absolute inset-0 flex items-center justify-center font-bold text-sm">80%</span></div>
+<p class="uppercase font-bold text-gray-400 text-xs">Target 1</p>
+</div>
+<!-- KPI 2 -->
+<div class="flex flex-col items-center">
+<div class="relative w-20 h-20 mb-1"><canvas id="kpi2"></canvas><span class="absolute inset-0 flex items-center justify-center font-bold text-sm">65%</span></div>
+<p class="uppercase font-bold text-gray-400 text-xs">Target 2</p>
+</div>
+<!-- KPI 3 -->
+<div class="flex flex-col items-center">
+<div class="relative w-20 h-20 mb-1"><canvas id="kpi3"></canvas><span class="absolute inset-0 flex items-center justify-center font-bold text-sm">90%</span></div>
+<p class="uppercase font-bold text-gray-400 text-xs">Target 3</p>
+</div>
+<!-- KPI 4 -->
+<div class="flex flex-col items-center">
+<div class="relative w-20 h-20 mb-1"><canvas id="kpi4"></canvas><span class="absolute inset-0 flex items-center justify-center font-bold text-sm">40%</span></div>
+<p class="uppercase font-bold text-gray-400 text-xs">Target 4</p>
+</div>
+<!-- KPI 5 -->
+<div class="flex flex-col items-center">
+<div class="relative w-20 h-20 mb-1"><canvas id="kpi5"></canvas><span class="absolute inset-0 flex items-center justify-center font-bold text-sm">75%</span></div>
+<p class="uppercase font-bold text-gray-400 text-xs">Target 5</p>
+</div>
+<!-- KPI 6 -->
+<div class="flex flex-col items-center">
+<div class="relative w-20 h-20 mb-1"><canvas id="kpi6"></canvas><span class="absolute inset-0 flex items-center justify-center font-bold text-sm">50%</span></div>
+<p class="uppercase font-bold text-gray-400 text-xs">Target 6</p>
+</div>
+</div>
+</section>
+<!-- ROW 2: Bar Chart & Pie Charts -->
+<!-- BOTTOM LEFT: Avg Sales by Day -->
+<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="bar-chart-section">
+<h2 class="text-lg font-bold text-gray-800 mb-3">Avg Sales by Day</h2>
+<div class="chart-container flex-1 relative">
+<canvas id="barChart"></canvas>
+</div>
+</section>
+<!-- BOTTOM CENTER: Sales by Item Type -->
+<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="pie-chart-section-items">
+<h2 class="text-lg font-bold text-gray-800 mb-3">Sales by Item Type</h2>
+<div class="chart-container flex-1 relative">
+<canvas id="pieChartItem"></canvas>
+</div>
+</section>
+<!-- BOTTOM RIGHT: Sales by Payment Method -->
+<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="pie-chart-section-payment">
+<h2 class="text-lg font-bold text-gray-800 mb-3">Sales by Payment Method</h2>
+<div class="chart-container flex-1 relative">
+<canvas id="pieChartPayment"></canvas>
+</div>
+</section>
+</div>
+<!-- BEGIN: Footer -->
+<footer class="mt-auto pt-3 pb-2 border-t border-gray-200 text-center bg-gray-50 flex-shrink-0" data-purpose="footer"><div class="container mx-auto px-6">
+<p class="text-xs text-gray-500 font-medium text-center">© 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.</p>
+</div></footer>
+<!-- END: Footer -->
+</main>
+<!-- END: MainContent -->
+</div>
+<!-- Charts Script -->
+<script data-purpose="canvas-setup">
+    let salesChartInstance = null;
+    function drawLineChartJS(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      if (salesChartInstance) salesChartInstance.destroy();
+      salesChartInstance = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'Sales (¥)',
+            data: [120000, 185000, 210000, 175000, 245000, 290000, 260000, 310000, 340000, 295000, 365000, 400000],
+            borderColor: '#30a1af',
+            backgroundColor: function(context) {
+              const chart = context.chart;
+              const { ctx, chartArea } = chart;
+              if (!chartArea) return 'rgba(48,161,175,0.1)';
+              const grad = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+              grad.addColorStop(0, 'rgba(48, 161, 175, 0.25)');
+              grad.addColorStop(1, 'rgba(48, 161, 175, 0)');
+              return grad;
+            },
+            fill: true,
+            tension: 0.4,
+            borderWidth: 3,
+            pointBackgroundColor: '#30a1af',
+            pointRadius: 4,
+            pointHoverRadius: 6,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => '¥' + ctx.parsed.y.toLocaleString()
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 400000,
+              ticks: {
+                callback: v => (v / 1000) + 'k',
+                color: '#9ca3af',
+                font: { size: 11 }
+              },
+              grid: { color: '#f3f4f6' }
+            },
+            x: {
+              ticks: {
+                color: '#9ca3af',
+                font: { size: 11 }
+              },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    let barChartInstance = null;
+    function drawBarChartJS(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      if (barChartInstance) barChartInstance.destroy();
+      barChartInstance = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+          datasets: [{
+            label: 'Avg Sales (¥)',
+            data: [185000, 245000, 312000, 198000, 410000],
+            backgroundColor: ['#d1d5db', '#d1d5db', '#d1d5db', '#d1d5db', '#2b8f9c'],
+            borderRadius: 4,
+            barPercentage: 0.6,
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => '¥' + ctx.parsed.x.toLocaleString()
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              max: 500000,
+              ticks: {
+                callback: v => (v / 1000) + 'k',
+                color: '#9ca3af',
+                font: { size: 11 }
+              },
+              grid: { color: '#f3f4f6' }
+            },
+            y: {
+              ticks: {
+                color: '#6b7280',
+                font: { size: 12, weight: '500' }
+              },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    let pieItemInstance = null;
+    function drawPieChartItem(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      if (pieItemInstance) pieItemInstance.destroy();
+      pieItemInstance = new Chart(canvas, {
+        type: 'pie',
+        data: {
+          labels: ['Main Dish', 'Side Dish', 'Drinks', 'Dessert'],
+          datasets: [{
+            data: [42, 28, 19, 11],
+            backgroundColor: ['#30a1af', '#e8735a', '#f0b752', '#c4c9d0'],
+            borderWidth: 2,
+            borderColor: '#ffffff',
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 12,
+                usePointStyle: true,
+                pointStyle: 'rectRounded',
+                font: { size: 11 },
+                color: '#6b7280'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.label + ': ' + ctx.parsed + '%'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    let piePaymentInstance = null;
+    function drawPieChartPayment(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      if (piePaymentInstance) piePaymentInstance.destroy();
+      piePaymentInstance = new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+          labels: ['Raku Pay', 'Company ID', 'Cash', 'Other'],
+          datasets: [{
+            data: [35, 30, 25, 10],
+            backgroundColor: ['#30a1af', '#e8735a', '#f0b752', '#c4c9d0'],
+            borderWidth: 2,
+            borderColor: '#ffffff',
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '55%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 12,
+                usePointStyle: true,
+                pointStyle: 'rectRounded',
+                font: { size: 11 },
+                color: '#6b7280'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.label + ': ' + ctx.parsed + '%'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    const kpiInstances = {};
+    function drawKpiGauge(canvasId, value) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      if (kpiInstances[canvasId]) kpiInstances[canvasId].destroy();
+      kpiInstances[canvasId] = new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: [value, 100 - value],
+            backgroundColor: ['#30a1af', '#f3f4f6'],
+            borderWidth: 0,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '72%',
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false }
+          },
+          rotation: -90,
+          circumference: 360,
+          animation: {
+            animateRotate: true,
+            duration: 800
+          }
+        }
+      });
+    }
+
+    function drawAllKpis() {
+      drawKpiGauge('kpi1', 80);
+      drawKpiGauge('kpi2', 65);
+      drawKpiGauge('kpi3', 90);
+      drawKpiGauge('kpi4', 40);
+      drawKpiGauge('kpi5', 75);
+      drawKpiGauge('kpi6', 50);
+    }
+
+    window.onload = () => {
+      drawLineChartJS('salesChart');
+      drawBarChartJS('barChart');
+      drawPieChartItem('pieChartItem');
+      drawPieChartPayment('pieChartPayment');
+      drawAllKpis();
+    };
+
+    window.onresize = () => {
+      drawLineChartJS('salesChart');
+      drawBarChartJS('barChart');
+      drawPieChartItem('pieChartItem');
+      drawPieChartPayment('pieChartPayment');
+      drawAllKpis();
+    };
+  </script>
+</body></html>

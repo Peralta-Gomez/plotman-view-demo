@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shokudoraku Sales Dashboard</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Font Awesome for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#30a1af',
+            primaryDark: '#2b8f9c',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #f3f4f6; /* Light gray background */
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .sidebar-transition {
+      transition: all 0.3s ease-in-out;
+    }
+    .chart-container {
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Simple CSS for circular gauges */
+    .gauge {
+      position: relative;
+      width: 60px;
+      height: 60px;
+    }
+  </style>
+</head>
+<body class="flex flex-col overflow-hidden w-[1920px] h-[1080px] mx-auto shadow-2xl relative bg-white">
+<!-- BEGIN: TopBar -->
+<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 z-20 shadow-sm" data-purpose="header">
+<div class="flex items-center gap-4">
+<img alt="Shokudoraku Logo" class="h-10 object-contain" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABQCAYAAABcbTqwAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA4JpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDowODYyMDQwRDFFMjA2ODExODNEMThGMjAyQUU0OTU0QyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozOUExQzczM0NFNjExMUU1QTJDNzg4NkMyNTMzOEVCRCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozOUExQzczMkNFNjExMUU1QTJDNzg4NkMyNTMzOEVCRCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOmFjYWRkNTcyLTQ3ZWItNGEzZi1iZTdjLWZlZThhZGQ0ZDkzMSIgc3RSZWY6ZG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOmI0NjE4M2JiLTEwMmQtMTE3OS1iOTEwLTgx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"/>
+<span class="text-xl font-bold text-gray-800 hidden md:inline-block text-2xl">Sales Analytics</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+<i class="fa-solid fa-bell text-gray-400 text-xl cursor-pointer hover:text-primary"></i>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-gray-200">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-semibold text-gray-900">Admin User</p>
+<p class="text-[10px] text-gray-500 text-primary">Manager</p>
+</div>
+<div class="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+          AD
+        </div>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<div class="flex flex-1 overflow-hidden">
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col sidebar-transition hidden md:flex h-full" data-purpose="sidebar">
+<nav class="flex-1 py-6 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-white bg-primary rounded-lg transition-colors" href="#">
+<i class="fa-solid fa-chart-line w-5"></i>
+<span class="font-medium text-lg">Sales Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors" href="#">
+<i class="fa-solid fa-magnifying-glass-chart w-5"></i>
+<span class="font-medium text-lg">Sales Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors" href="#">
+<i class="fa-solid fa-boxes-stacked w-5"></i>
+<span class="font-medium text-lg">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors" href="#">
+<i class="fa-solid fa-file-invoice-dollar w-5"></i>
+<span class="font-medium text-lg">Reports</span>
+</a>
+</nav>
+<div class="p-4 border-t border-gray-100">
+<button class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-red-600 w-full transition-colors">
+<i class="fa-solid fa-right-from-bracket w-5"></i>
+<span class="font-medium text-lg">Logout</span>
+</button>
+</div>
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 overflow-y-auto p-6 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
+<div class="grid grid-cols-12 gap-6 w-full px-6">
+<!-- ROW 1: Overall Sales & Metrics & KPI Gauges -->
+<!-- TOP LEFT: Overall Sales Chart -->
+<section class="col-span-12 lg:col-span-5 bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-purpose="overall-sales-chart">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-lg font-bold text-gray-800 text-2xl">Overall Sales</h2>
+<select class="text-xs border-gray-300 rounded-md focus:ring-primary">
+<option>Last 30 Days</option>
+<option>Year to Date</option>
+</select>
+</div>
+<div class="chart-container relative" style="min-height: 400px; display: flex; align-items: center; justify-content: center;"><div class="flex w-full h-full gap-2">
+<div class="flex flex-col justify-between text-gray-400 pb-6 text-sm">
+<span>400k</span><span>300k</span><span>200k</span><span>100k</span><span>0</span>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex-1 relative">
+<canvas class="w-full h-full" id="salesChart"></canvas>
+</div>
+<div class="flex justify-between text-gray-400 mt-2 px-2 text-sm">
+<span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span>
+</div>
+</div>
+</div></div>
+</section>
+<!-- MIDDLE: Metric Cards -->
+<section class="col-span-12 md:col-span-6 lg:col-span-3 flex flex-col gap-4" data-purpose="metric-summaries">
+<div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+<div>
+<p class="text-xs text-gray-500 font-medium uppercase tracking-wider text-sm">Avg Sales This Year</p>
+<p class="text-2xl font-bold text-gray-900 mt-1 text-4xl">¥400,000</p>
+</div>
+<div class="p-3 bg-teal-50 rounded-lg text-primary">
+<i class="fa-solid fa-yen-sign text-xl"></i>
+</div>
+</div>
+<div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+<div>
+<p class="text-xs text-gray-500 font-medium uppercase tracking-wider text-sm">Avg Expend / Transaction</p>
+<p class="text-2xl font-bold text-gray-900 mt-1 text-4xl">¥4,021</p>
+</div>
+<div class="p-3 bg-orange-50 rounded-lg text-orange-500">
+<i class="fa-solid fa-wallet text-xl"></i>
+</div>
+</div>
+<div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+<div>
+<p class="text-xs text-gray-500 font-medium uppercase tracking-wider text-sm">Avg Clients / Day</p>
+<p class="text-2xl font-bold text-gray-900 mt-1 text-4xl">70 人</p>
+</div>
+<div class="p-3 bg-blue-50 rounded-lg text-blue-500">
+<i class="fa-solid fa-users text-xl"></i>
+</div>
+</div>
+</section>
+<!-- TOP RIGHT: KPI Section -->
+<section class="col-span-12 md:col-span-6 lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-purpose="kpi-section">
+<h2 class="text-lg font-bold text-gray-800 mb-6 text-2xl">KPI Tracking</h2>
+<div class="grid grid-cols-3 gap-y-8 gap-x-4">
+<!-- KPI 1 -->
+<div class="flex flex-col items-center">
+<div class="gauge-container mb-2 relative flex items-center justify-center">
+<svg class="w-24 h-24 transform -rotate-90"><circle class="text-gray-100" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-width="8"></circle><circle class="text-primary" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-dasharray="263.89" stroke-dashoffset="52.7" stroke-width="8"></circle></svg>
+<span class="absolute font-bold text-lg">80%</span>
+</div>
+<p class="uppercase font-bold text-gray-400 text-sm">Target 1</p>
+</div>
+<!-- KPI 2 -->
+<div class="flex flex-col items-center">
+<div class="gauge-container mb-2 relative flex items-center justify-center">
+<svg class="w-24 h-24 transform -rotate-90"><circle class="text-gray-100" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-width="8"></circle><circle class="text-primary" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-dasharray="263.89" stroke-dashoffset="52.7" stroke-width="8"></circle></svg>
+<span class="absolute font-bold text-lg">65%</span>
+</div>
+<p class="uppercase font-bold text-gray-400 text-sm">Target 2</p>
+</div>
+<!-- KPI 3 -->
+<div class="flex flex-col items-center">
+<div class="gauge-container mb-2 relative flex items-center justify-center">
+<svg class="w-24 h-24 transform -rotate-90"><circle class="text-gray-100" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-width="8"></circle><circle class="text-primary" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-dasharray="263.89" stroke-dashoffset="52.7" stroke-width="8"></circle></svg>
+<span class="absolute font-bold text-lg">90%</span>
+</div>
+<p class="uppercase font-bold text-gray-400 text-sm">Target 3</p>
+</div>
+<!-- KPI 4 -->
+<div class="flex flex-col items-center">
+<div class="gauge-container mb-2 relative flex items-center justify-center">
+<svg class="w-24 h-24 transform -rotate-90"><circle class="text-gray-100" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-width="8"></circle><circle class="text-primary" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-dasharray="263.89" stroke-dashoffset="52.7" stroke-width="8"></circle></svg>
+<span class="absolute font-bold text-lg">40%</span>
+</div>
+<p class="uppercase font-bold text-gray-400 text-sm">Target 4</p>
+</div>
+<!-- KPI 5 -->
+<div class="flex flex-col items-center">
+<div class="gauge-container mb-2 relative flex items-center justify-center">
+<svg class="w-24 h-24 transform -rotate-90"><circle class="text-gray-100" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-width="8"></circle><circle class="text-primary" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-dasharray="263.89" stroke-dashoffset="52.7" stroke-width="8"></circle></svg>
+<span class="absolute font-bold text-lg">75%</span>
+</div>
+<p class="uppercase font-bold text-gray-400 text-sm">Target 5</p>
+</div>
+<!-- KPI 6 -->
+<div class="flex flex-col items-center">
+<div class="gauge-container mb-2 relative flex items-center justify-center">
+<svg class="w-24 h-24 transform -rotate-90"><circle class="text-gray-100" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-width="8"></circle><circle class="text-primary" cx="48" cy="48" fill="transparent" r="42" stroke="currentColor" stroke-dasharray="263.89" stroke-dashoffset="52.7" stroke-width="8"></circle></svg>
+<span class="absolute font-bold text-lg">50%</span>
+</div>
+<p class="uppercase font-bold text-gray-400 text-sm">Target 6</p>
+</div>
+</div>
+</section>
+<!-- ROW 2: Bar Chart & Pie Charts -->
+<!-- BOTTOM LEFT: Avg Sales by Day -->
+<section class="col-span-12 lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-purpose="bar-chart-section">
+<h2 class="text-lg font-bold text-gray-800 mb-4 text-2xl">Avg Sales by Day</h2>
+<div class="chart-container" style="min-height: 400px; display: flex; align-items: center; justify-content: center;"><div class="flex w-full h-full gap-3">
+<div class="flex flex-col justify-between text-gray-500 font-medium py-2 text-sm">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex-1 relative">
+<canvas class="w-full h-full" id="barChart"></canvas>
+</div>
+<div class="flex justify-between text-gray-400 mt-2 text-sm">
+<span>0</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+</div>
+</div>
+</div></div>
+</section>
+<!-- BOTTOM CENTER: Sales by Item Type -->
+<section class="col-span-12 md:col-span-6 lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-purpose="pie-chart-section-items">
+<h2 class="text-lg font-bold text-gray-800 mb-4 text-2xl">Sales by Item Type</h2>
+<div class="chart-container" style="min-height: 400px; display: flex; align-items: center; justify-content: center;"><div class="flex flex-col items-center w-full h-full gap-6">
+<div class="relative h-72 w-72">
+<canvas id="pieChartItem"></canvas>
+</div>
+<div class="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#30a1af]"></span><span>Main Dish</span></div>
+<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#2b8f9c]"></span><span>Side Dish</span></div>
+<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#94d3db]"></span><span>Drinks</span></div>
+<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#e5e7eb]"></span><span>Dessert</span></div>
+</div>
+</div></div>
+</section>
+<!-- BOTTOM RIGHT: Sales by Payment Method -->
+<section class="col-span-12 md:col-span-6 lg:col-span-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100" data-purpose="pie-chart-section-payment">
+<h2 class="text-lg font-bold text-gray-800 mb-4 text-2xl">Sales by Payment Method</h2>
+<div class="chart-container" style="min-height: 400px; display: flex; align-items: center; justify-content: center;"><div class="flex flex-col items-center w-full h-full gap-6">
+<div class="relative h-72 w-72">
+<canvas id="pieChartPayment"></canvas>
+</div>
+<div class="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#30a1af]"></span><span>Cash</span></div>
+<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#2b8f9c]"></span><span>Credit Card</span></div>
+<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#94d3db]"></span><span>E-Wallet</span></div>
+<div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-[#e5e7eb]"></span><span>Other</span></div>
+</div>
+</div></div>
+</section>
+</div>
+<!-- BEGIN: Footer -->
+<footer class="mt-auto py-6 border-t border-gray-200 text-center bg-gray-50" data-purpose="footer"><div class="container mx-auto px-6">
+<p class="text-sm text-gray-500 font-medium text-center">© 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.</p>
+</div></footer>
+<!-- END: Footer -->
+</main>
+<!-- END: MainContent -->
+</div>
+<!-- Charts Script -->
+<script data-purpose="canvas-setup">
+    // Helper to draw simulated charts using Canvas API (mimicking the sketch layouts)
+    
+    function drawLineChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth;
+      const h = canvas.height = canvas.parentElement.clientHeight;
+      
+      ctx.strokeStyle = '#30a1af';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, h * 0.8);
+      ctx.bezierCurveTo(w * 0.2, h * 0.7, w * 0.4, h * 0.4, w * 0.6, h * 0.5);
+      ctx.bezierCurveTo(w * 0.8, h * 0.6, w * 0.9, h * 0.2, w, h * 0.3);
+      ctx.stroke();
+      
+      // Gradient fill
+      const grad = ctx.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0, 'rgba(48, 161, 175, 0.2)');
+      grad.addColorStop(1, 'rgba(48, 161, 175, 0)');
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    function drawBarChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth;
+      const h = canvas.height = canvas.parentElement.clientHeight;
+      
+      const barCount = 7;
+      const barHeight = (h / barCount) * 0.6;
+      const spacing = (h / barCount) * 0.4;
+      const values = [0.4, 0.6, 0.8, 0.5, 0.9, 0.7, 0.3];
+      
+      values.forEach((val, i) => {
+        ctx.fillStyle = i === 4 ? '#2b8f9c' : '#e5e7eb';
+        const barW = val * (w - 40);
+        // Horizontal bars: y changes with index, x starts at a margin
+        ctx.fillRect(20, i * (barHeight + spacing) + spacing/2, barW, barHeight);
+      });
+    }
+
+    function drawPieChart(canvasId, type = 'pie') {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth;
+      const h = canvas.height = canvas.parentElement.clientHeight;
+      const centerX = w / 2;
+      const centerY = h / 2;
+      const radius = Math.min(w, h) / 2.1; // Increased radius to fill more space
+      
+      const slices = [
+        { percent: 0.4, color: '#30a1af' },
+        { percent: 0.3, color: '#2b8f9c' },
+        { percent: 0.2, color: '#94d3db' },
+        { percent: 0.1, color: '#e5e7eb' }
+      ];
+      
+      let startAngle = -Math.PI / 2;
+      slices.forEach(slice => {
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, startAngle + (Math.PI * 2 * slice.percent));
+        ctx.fillStyle = slice.color;
+        ctx.fill();
+        startAngle += (Math.PI * 2 * slice.percent);
+      });
+
+      if (type === 'donut') {
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius * 0.65, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+      }
+    }
+
+    window.onload = () => {
+      drawLineChart('salesChart');
+      drawBarChart('barChart');
+      drawPieChart('pieChartItem');
+      drawPieChart('pieChartPayment', 'donut');
+    };
+
+    window.onresize = () => {
+      drawLineChart('salesChart');
+      drawBarChart('barChart');
+      drawPieChart('pieChartItem');
+      drawPieChart('pieChartPayment', 'donut');
+    };
+  </script>
+</body></html>

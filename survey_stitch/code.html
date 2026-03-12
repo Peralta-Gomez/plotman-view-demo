@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Survey Analytics - Cafeteria Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#30a1af",
+                        "primary-dark": "#2b8f9c",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                        "neutral-accent": "#f1f5f9",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen overflow-x-hidden">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary rounded-xl p-2 text-white">
+<span class="material-symbols-outlined text-2xl">restaurant</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none">Cafeteria Admin</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Management Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-medium">Sales Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-medium">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-medium">Survey Analytics</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<img class="size-10 rounded-full object-cover" data-alt="User profile avatar of admin user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHaaVz7rnbVaiBGKuDN7oIwVwELrBbXiqN14VZ-7A0r4FFIxDcQ5ioOAie6O6YRrFuc5IRtekpAM2_UfLDwU_dazm3KW3Yf3ozRxrI06_DXTH9_QnOUvnJTmDGGETCnnVS0Vz2Iw3NvrfrECODCXkt6ky9nac6Scqrsk5nYJbixAerePm0DoiX6_VOqidCspRbYLTtnsQfj3dHACtf1nOoz4CibXCCVTd0uvYqXx4s4tr7oGVH0mheaDFdA6pBskmnXFUOaE7ok2g"/>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Alex Johnson</p>
+<p class="text-xs text-slate-500 truncate">Senior Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<header class="h-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-10 shrink-0">
+<div class="flex items-center gap-6">
+<h2 class="text-2xl font-bold">Survey Analytics</h2>
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search surveys, feedback, or items..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-px bg-slate-200 dark:border-slate-800 mx-2"></div>
+<img class="h-10 w-auto rounded-lg" data-alt="Company logo for cafeteria services" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSI6v-RDoB1_28Nuc3spl0Ey1HJkQCgdzOiLjHSpYjdpUjfG5KjjsH0W4l9GBiZG-JTFY_-AaEeLpeACFqysucL_Wl5Srbo1PBTk6vn6yHoRJhECbeYdDH1Vej9Tjj-jyP85ynJ4GPGTOul3SLWAs7k_2G9R7zOOR0fLo2_aQWGzx8xYzJ-CGxJGgPCYjSOvThmGjLcd3Z5XIGF1oFCsdCEFrKI9kS5rXFBH-2RRbKnAZqKvSN0tnM9Sgj_N_zHYu26sm8-2mQxmM"/>
+</div>
+</header>
+<!-- Dashboard Content -->
+<main class="flex-1 overflow-y-auto p-10">
+<div class="max-w-[1600px] mx-auto space-y-8">
+<!-- Top Row: Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-center">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 dark:text-slate-400 font-medium">Overall Rating</p>
+<span class="material-symbols-outlined text-primary">star</span>
+</div>
+<div class="flex items-baseline gap-4">
+<h3 class="text-5xl font-bold">4.2 <span class="text-2xl font-normal text-slate-400">/ 5</span></h3>
+<div class="flex items-center gap-1 text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-lg text-sm font-bold">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+                                    0.2%
+                                </div>
+</div>
+<p class="text-sm text-slate-400 mt-2">Based on 1,240 lifetime reviews</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-center">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-500 dark:text-slate-400 font-medium">Surveys Answered (Last Month)</p>
+<span class="material-symbols-outlined text-primary">forum</span>
+</div>
+<div class="flex items-baseline gap-4">
+<h3 class="text-5xl font-bold">400</h3>
+<div class="flex items-center gap-1 text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-lg text-sm font-bold">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+                                    15%
+                                </div>
+</div>
+<p class="text-sm text-slate-400 mt-2">Compared to 348 previous month</p>
+</div>
+</div>
+<!-- Middle Section Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 h-auto">
+<!-- Left: Satisfaction Over Time -->
+<div class="lg:col-span-5 bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h4 class="text-lg font-bold">Satisfaction Over Time</h4>
+<select class="text-sm bg-slate-50 dark:bg-slate-800 border-none rounded-lg focus:ring-0">
+<option>Last 6 Months</option>
+<option>Last Year</option>
+</select>
+</div>
+<div class="h-64 w-full relative"><div class="absolute left-0 top-0 h-full flex flex-col justify-between text-[10px] text-slate-400 font-bold pb-6 -ml-6 ml-4">
+<span>5</span>
+<span>4</span>
+<span>3</span>
+<span>2</span>
+<span>1</span>
+</div>
+<!-- Line Chart Visualization Mockup -->
+<svg class="w-full h-full ml-4" preserveaspectratio="none" viewbox="0 0 400 200">
+<defs>
+<lineargradient id="lineGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#30a1af" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#30a1af" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,150 C50,140 100,160 150,100 S250,20 300,60 S350,80 400,40 V200 H0 Z" fill="url(#lineGrad)"></path>
+<path d="M0,150 C50,140 100,160 150,100 S250,20 300,60 S350,80 400,40" fill="none" stroke="#30a1af" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="150" cy="100" fill="#30a1af" r="4"></circle>
+<circle cx="300" cy="60" fill="#30a1af" r="4"></circle>
+</svg>
+<div class="flex justify-between mt-4 text-xs text-slate-400 font-bold uppercase tracking-wider ml-4">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+</div>
+</div>
+</div>
+<!-- Center: Menu Item Satisfaction Ranking -->
+<div class="lg:col-span-4 bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="text-lg font-bold mb-6">Menu Item Satisfaction Ranking</h4>
+<div class="space-y-6">
+<div class="space-y-2"><div class="flex justify-between items-center text-sm py-1">
+<span class="font-medium">Grilled Salmon Bowl</span>
+<span class="text-primary font-bold">4.8 ★</span>
+</div></div>
+<div class="space-y-2"><div class="flex justify-between items-center text-sm py-1">
+<span class="font-medium">Quinoa Salad</span>
+<span class="text-primary font-bold">4.5 ★</span>
+</div></div>
+<div class="space-y-2"><div class="flex justify-between items-center text-sm py-1">
+<span class="font-medium">Beef Tacos</span>
+<span class="text-primary font-bold">4.1 ★</span>
+</div></div>
+<div class="space-y-2"><div class="flex justify-between items-center text-sm py-1">
+<span class="font-medium">Classic Burger</span>
+<span class="text-primary font-bold">3.9 ★</span>
+</div></div>
+<div class="space-y-2"><div class="flex justify-between items-center text-sm py-1">
+<span class="font-medium text-slate-400">Vegetable Soup</span>
+<span class="text-orange-400 font-bold">2.4 ★</span>
+</div></div>
+</div>
+<button class="w-full mt-6 py-2 text-primary font-semibold text-sm hover:bg-primary/5 rounded-lg transition-colors">View All Items</button>
+</div>
+<!-- Right Area (Combined Vertically) -->
+<div class="lg:col-span-3 space-y-8">
+<!-- Number of Surveys Over Time -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="text-lg font-bold mb-4">Surveys Volume</h4>
+<div class="h-40 w-full">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 200 100">
+<rect fill="#30a1af" height="60" rx="2" width="20" x="10" y="40"></rect>
+<rect fill="#30a1af" height="80" rx="2" width="20" x="40" y="20"></rect>
+<rect fill="#30a1af" height="50" opacity="0.6" rx="2" width="20" x="70" y="50"></rect>
+<rect fill="#30a1af" height="70" rx="2" width="20" x="100" y="30"></rect>
+<rect fill="#30a1af" height="90" rx="2" width="20" x="130" y="10"></rect>
+<rect fill="#30a1af" height="55" rx="2" width="20" x="160" y="45"></rect>
+</svg>
+<div class="flex justify-between mt-2 text-[10px] text-slate-400 font-bold uppercase">
+<span>Wk 1</span><span>Wk 2</span><span>Wk 3</span><span>Wk 4</span>
+</div>
+</div>
+</div>
+<!-- Survey Comments -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex-1 flex flex-col">
+<h4 class="text-lg font-bold mb-4">Recent Feedback</h4>
+<div class="space-y-4 overflow-y-auto max-h-[350px] pr-2 custom-scrollbar">
+<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-primary">5.0 ★</span>
+<span class="text-[10px] text-slate-400">2h ago</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 italic">"The salmon bowl was exceptional today! Perfect seasoning."</p>
+</div>
+<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-primary">4.0 ★</span>
+<span class="text-[10px] text-slate-400">5h ago</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 italic">"Quick service during rush hour. Much appreciated."</p>
+</div>
+<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-orange-400">2.0 ★</span>
+<span class="text-[10px] text-slate-400">1d ago</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 italic">"Vegetable soup was quite cold. Usually better than this."</p>
+</div>
+<div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-primary">4.5 ★</span>
+<span class="text-[10px] text-slate-400">1d ago</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 italic">"Great atmosphere and the staff were very friendly."</p>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors">View All Comments</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="h-12 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-10 text-xs text-slate-500 shrink-0 bg-white dark:bg-slate-900">
+<p>© 2024 Cafeteria Management Systems. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</footer>
+</div>
+</div>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</body></html>
