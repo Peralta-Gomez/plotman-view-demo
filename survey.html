@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!--
+  © 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.
+-->
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Survey Analytics - Shokudoraku</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Font Awesome for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#30a1af',
+            primaryDark: '#2b8f9c',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #f3f4f6;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .sidebar-transition {
+      transition: all 0.3s ease-in-out;
+    }
+    .chart-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="flex flex-col overflow-hidden w-[1920px] h-[1080px] mx-auto shadow-2xl relative bg-white">
+<!-- BEGIN: TopBar -->
+<div id="shared-header"></div>
+<!-- END: TopBar -->
+<div class="flex flex-1 overflow-hidden">
+<!-- BEGIN: LeftSidebar -->
+<div id="shared-sidebar"></div>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
+<div class="grid grid-cols-12 gap-4 w-full flex-1">
+<!-- ROW 1: Metric Cards -->
+<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center max-h-[160px]" data-purpose="overall-rating">
+  <div class="flex items-center justify-between mb-2">
+    <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">Overall Rating</p>
+    <i class="fa-solid fa-star text-primary text-lg"></i>
+  </div>
+  <div class="flex items-baseline gap-3">
+    <h3 class="text-4xl font-bold text-gray-900">4.2 <span class="text-xl font-normal text-gray-400">/ 5</span></h3>
+    <div class="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg text-xs font-bold">
+      <i class="fa-solid fa-arrow-up text-[10px]"></i> 0.2%
+    </div>
+  </div>
+  <p class="text-xs text-gray-400 mt-1">Based on 1,240 lifetime reviews</p>
+</section>
+<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center max-h-[160px]" data-purpose="surveys-answered">
+  <div class="flex items-center justify-between mb-2">
+    <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">Surveys Answered (Last Month)</p>
+    <i class="fa-solid fa-comments text-primary text-lg"></i>
+  </div>
+  <div class="flex items-baseline gap-3">
+    <h3 class="text-4xl font-bold text-gray-900">400</h3>
+    <div class="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg text-xs font-bold">
+      <i class="fa-solid fa-arrow-up text-[10px]"></i> 15%
+    </div>
+  </div>
+  <p class="text-xs text-gray-400 mt-1">Compared to 348 previous month</p>
+</section>
+
+<!-- ROW 2: Charts & Rankings -->
+<!-- Satisfaction Over Time -->
+<section class="col-span-5 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="satisfaction-chart">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-lg font-bold text-gray-800">Satisfaction Over Time</h2>
+    <select class="text-xs border-gray-300 rounded-md focus:ring-primary">
+      <option>Last 6 Months</option>
+      <option>Last Year</option>
+    </select>
+  </div>
+  <div class="chart-container flex-1 relative">
+    <canvas id="satisfactionChart"></canvas>
+  </div>
+</section>
+
+<!-- Menu Item Satisfaction Ranking -->
+<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="ranking-section">
+  <h2 class="text-lg font-bold text-gray-800 mb-4">Menu Item Satisfaction Ranking</h2>
+  <div class="space-y-3 flex-1">
+    <div class="flex justify-between items-center py-2 border-b border-gray-50">
+      <span class="text-sm font-medium text-gray-700">Grilled Salmon Bowl</span>
+      <span class="text-sm text-primary font-bold">4.8 <i class="fa-solid fa-star text-xs"></i></span>
+    </div>
+    <div class="flex justify-between items-center py-2 border-b border-gray-50">
+      <span class="text-sm font-medium text-gray-700">Quinoa Salad</span>
+      <span class="text-sm text-primary font-bold">4.5 <i class="fa-solid fa-star text-xs"></i></span>
+    </div>
+    <div class="flex justify-between items-center py-2 border-b border-gray-50">
+      <span class="text-sm font-medium text-gray-700">Beef Tacos</span>
+      <span class="text-sm text-primary font-bold">4.1 <i class="fa-solid fa-star text-xs"></i></span>
+    </div>
+    <div class="flex justify-between items-center py-2 border-b border-gray-50">
+      <span class="text-sm font-medium text-gray-700">Classic Burger</span>
+      <span class="text-sm text-primary font-bold">3.9 <i class="fa-solid fa-star text-xs"></i></span>
+    </div>
+    <div class="flex justify-between items-center py-2">
+      <span class="text-sm font-medium text-gray-400">Vegetable Soup</span>
+      <span class="text-sm text-orange-400 font-bold">2.4 <i class="fa-solid fa-star text-xs"></i></span>
+    </div>
+  </div>
+  <button class="w-full mt-3 py-2 text-primary font-semibold text-sm hover:bg-primary/5 rounded-lg transition-colors">View All Items</button>
+</section>
+
+<!-- Surveys Volume -->
+<section class="col-span-3 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="volume-chart">
+  <h2 class="text-lg font-bold text-gray-800 mb-3">Surveys Volume</h2>
+  <div class="chart-container flex-1 relative">
+    <canvas id="volumeChart"></canvas>
+  </div>
+</section>
+
+<!-- ROW 3: Recent Feedback -->
+<section class="col-span-12 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="feedback-section">
+  <h2 class="text-lg font-bold text-gray-800 mb-4">Recent Feedback</h2>
+  <div class="grid grid-cols-4 gap-4 flex-1 overflow-y-auto custom-scrollbar">
+    <div class="p-4 bg-gray-50 rounded-lg">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-xs font-bold text-primary">5.0 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-[10px] text-gray-400">2h ago</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">"The salmon bowl was exceptional today! Perfect seasoning."</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-xs font-bold text-primary">4.0 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-[10px] text-gray-400">5h ago</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">"Quick service during rush hour. Much appreciated."</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-xs font-bold text-orange-400">2.0 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-[10px] text-gray-400">1d ago</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">"Vegetable soup was quite cold. Usually better than this."</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-xs font-bold text-primary">4.5 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-[10px] text-gray-400">1d ago</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">"Great atmosphere and the staff were very friendly."</p>
+    </div>
+  </div>
+  <button class="w-full mt-3 py-2 border border-gray-200 text-gray-500 font-semibold text-sm hover:bg-gray-50 rounded-lg transition-colors">View All Comments</button>
+</section>
+</div>
+<!-- BEGIN: Footer -->
+<footer class="mt-auto pt-3 pb-2 border-t border-gray-200 text-center bg-gray-50 flex-shrink-0" data-purpose="footer"><div class="container mx-auto px-6">
+<p class="text-xs text-gray-500 font-medium text-center">© 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.</p>
+</div></footer>
+<!-- END: Footer -->
+</main>
+<!-- END: MainContent -->
+</div>
+<!-- Shared Components -->
+<script src="components/header.js"></script>
+<script src="components/sidebar.js"></script>
+<!-- Charts Script -->
+<script>
+    // Satisfaction Over Time - Line Chart
+    let satisfactionInstance = null;
+    function drawSatisfactionChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      if (satisfactionInstance) satisfactionInstance.destroy();
+      satisfactionInstance = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Satisfaction',
+            data: [3.8, 3.9, 4.0, 4.3, 4.1, 4.2],
+            borderColor: '#30a1af',
+            backgroundColor: function(context) {
+              const chart = context.chart;
+              const { ctx, chartArea } = chart;
+              if (!chartArea) return 'rgba(48,161,175,0.1)';
+              const grad = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+              grad.addColorStop(0, 'rgba(48, 161, 175, 0.25)');
+              grad.addColorStop(1, 'rgba(48, 161, 175, 0)');
+              return grad;
+            },
+            fill: true,
+            tension: 0.4,
+            borderWidth: 3,
+            pointBackgroundColor: '#30a1af',
+            pointRadius: 5,
+            pointHoverRadius: 7,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => 'Rating: ' + ctx.parsed.y.toFixed(1) + ' / 5'
+              }
+            }
+          },
+          scales: {
+            y: {
+              min: 1,
+              max: 5,
+              ticks: {
+                stepSize: 1,
+                color: '#9ca3af',
+                font: { size: 11 }
+              },
+              grid: { color: '#f3f4f6' }
+            },
+            x: {
+              ticks: {
+                color: '#9ca3af',
+                font: { size: 11 }
+              },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // Surveys Volume - Bar Chart
+    let volumeInstance = null;
+    function drawVolumeChart(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      if (volumeInstance) volumeInstance.destroy();
+      volumeInstance = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6'],
+          datasets: [{
+            label: 'Surveys',
+            data: [85, 120, 72, 105, 140, 80],
+            backgroundColor: '#30a1af',
+            borderRadius: 4,
+            barPercentage: 0.6,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.parsed.y + ' surveys'
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: '#9ca3af',
+                font: { size: 10 }
+              },
+              grid: { color: '#f3f4f6' }
+            },
+            x: {
+              ticks: {
+                color: '#9ca3af',
+                font: { size: 10 }
+              },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    window.onload = () => {
+      loadHeader();
+      loadSidebar('survey');
+      drawSatisfactionChart('satisfactionChart');
+      drawVolumeChart('volumeChart');
+    };
+
+    window.onresize = () => {
+      drawSatisfactionChart('satisfactionChart');
+      drawVolumeChart('volumeChart');
+    };
+  </script>
+</body></html>
