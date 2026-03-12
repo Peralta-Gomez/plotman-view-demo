@@ -4,7 +4,7 @@ function loadSidebar(activePage) {
 
   const pages = [
     { id: 'sales', icon: 'fa-chart-line', label: 'Sales Analysis', href: 'main_view.html' },
-    { id: 'items', icon: 'fa-magnifying-glass-chart', label: 'Item Details', href: '#' },
+    { id: 'items', icon: 'fa-magnifying-glass-chart', label: 'Item Details', href: 'item_details.html' },
     { id: 'inventory', icon: 'fa-boxes-stacked', label: 'Inventory', href: '#' },
     { id: 'survey', icon: 'fa-clipboard-list', label: 'Survey', href: 'survey.html' },
   ];
