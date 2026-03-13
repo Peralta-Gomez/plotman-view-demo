@@ -13,6 +13,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script>
     tailwind.config = {
       theme: {
@@ -162,6 +163,9 @@
     // Fixed 1920x1080 viewport — disable Chart.js responsive mode to prevent
     // ResizeObserver feedback loops with CSS transform scaling
     Chart.defaults.responsive = false;
+    // Register datalabels plugin, disabled by default
+    Chart.register(ChartDataLabels);
+    Chart.defaults.plugins.datalabels = { display: false };
 </script>
 <script data-purpose="canvas-setup">
     const salesData = {
@@ -404,6 +408,12 @@
               callbacks: {
                 label: ctx => ctx.label + ': ' + ctx.parsed + '%'
               }
+            },
+            datalabels: {
+              display: true,
+              color: '#fff',
+              font: { size: 14, weight: 'bold' },
+              formatter: (value) => value + '%',
             }
           }
         }
@@ -444,6 +454,12 @@
               callbacks: {
                 label: ctx => ctx.label + ': ' + ctx.parsed + '%'
               }
+            },
+            datalabels: {
+              display: true,
+              color: '#fff',
+              font: { size: 14, weight: 'bold' },
+              formatter: (value) => value + '%',
             }
           }
         }
