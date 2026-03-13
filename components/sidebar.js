@@ -5,7 +5,7 @@ function loadSidebar(activePage) {
   const pages = [
     { id: 'sales', icon: 'fa-chart-line', label: '売上分析', href: 'main_view.html' },
     { id: 'items', icon: 'fa-magnifying-glass-chart', label: '商品詳細', href: 'item_details.html' },
-    { id: 'inventory', icon: 'fa-boxes-stacked', label: '在庫管理', href: '#' },
+    // { id: 'inventory', icon: 'fa-boxes-stacked', label: '在庫管理', href: '#' },
     { id: 'survey', icon: 'fa-clipboard-list', label: 'アンケート', href: 'survey.html' },
   ];
 

@@ -2,7 +2,7 @@ function loadHeader() {
   const header = document.getElementById('shared-header');
   if (!header) return;
   header.outerHTML = `
-<header class="bg-white border-b border-gray-200 h-14 flex items-center justify-between px-6 z-20 shadow-sm flex-shrink-0" data-purpose="header">
+<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-10 z-20 shadow-sm flex-shrink-0" data-purpose="header">
   <div class="flex items-center gap-4">
     <img alt="Shokudoraku Logo" class="h-10 object-contain" src="img/logo.png"/>
     <span class="text-3xl font-bold text-gray-800 hidden md:inline-block">Data Analytics</span>
