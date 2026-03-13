@@ -21,6 +21,9 @@
           colors: {
             primary: '#30a1af',
             primaryDark: '#2b8f9c',
+          },
+          gridTemplateColumns: {
+            '18': 'repeat(18, minmax(0, 1fr))',
           }
         }
       }
@@ -56,10 +59,10 @@
 <!-- END: LeftSidebar -->
 <!-- BEGIN: MainContent -->
 <main class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
-<div class="grid grid-cols-12 gap-4 w-full flex-1">
+<div class="grid grid-cols-18 gap-4 w-full flex-1">
 <!-- ROW 1: Overall Sales & Metrics & KPI Gauges -->
 <!-- TOP LEFT: Overall Sales Chart -->
-<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col max-h-[400px]" data-purpose="overall-sales-chart">
+<section class="col-span-10 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col max-h-[400px]" data-purpose="overall-sales-chart">
 <div class="flex justify-between items-center mb-3">
 <h2 class="text-xl font-bold text-gray-800">全体売上</h2>
 <div class="flex gap-2" id="salesBtns">
@@ -80,7 +83,7 @@
 </div>
 <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
 <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">平均取引額</p>
-<p id="metricAvgTx" class="text-3xl font-bold text-gray-900 mt-1">¥4,021</p>
+<p id="metricAvgTx" class="text-3xl font-bold text-gray-900 mt-1">¥402</p>
 </div>
 <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
 <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">1日平均来客数</p>
@@ -88,7 +91,7 @@
 </div>
 </section>
 <!-- TOP RIGHT: KPI Section -->
-<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col max-h-[400px]" data-purpose="kpi-section">
+<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col max-h-[400px]" data-purpose="kpi-section">
 <h2 class="text-xl font-bold text-gray-800 mb-4">KPI管理</h2>
 <div class="grid grid-cols-3 gap-y-2 gap-x-2 flex-1 content-center justify-items-center">
 <!-- KPI 1 -->
@@ -125,21 +128,21 @@
 </section>
 <!-- ROW 2: Bar Chart & Pie Charts -->
 <!-- BOTTOM LEFT: Avg Sales by Day -->
-<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="bar-chart-section">
+<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="bar-chart-section">
 <h2 class="text-xl font-bold text-gray-800 mb-3">曜日別平均売上</h2>
 <div class="chart-container flex-1 relative">
 <canvas id="barChart"></canvas>
 </div>
 </section>
 <!-- BOTTOM CENTER: Sales by Item Type -->
-<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="pie-chart-section-items">
+<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="pie-chart-section-items">
 <h2 class="text-xl font-bold text-gray-800 mb-3">商品カテゴリ別売上</h2>
 <div class="chart-container flex-1 relative">
 <canvas id="pieChartItem"></canvas>
 </div>
 </section>
 <!-- BOTTOM RIGHT: Sales by Payment Method -->
-<section class="col-span-4 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="pie-chart-section-payment">
+<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="pie-chart-section-payment">
 <h2 class="text-xl font-bold text-gray-800 mb-3">決済方法別売上</h2>
 <div class="chart-container flex-1 relative">
 <canvas id="pieChartPayment"></canvas>
@@ -177,7 +180,7 @@
     // Per-timeframe data for bar chart (day-of-week avg sales)
     const barData = {
       'week':  { data: [58000, 72000, 85000, 64000, 95000], max: 120000 },
-      'month': { data: [185000, 245000, 312000, 198000, 410000], max: 500000 },
+      'month': { data: [165000, 220000, 295000, 180000, 380000], max: 500000 },
       'year':  { data: [185000, 245000, 312000, 198000, 410000], max: 500000 },
     };
 
@@ -350,6 +353,14 @@
               callbacks: {
                 label: ctx => '¥' + (ctx.parsed.x >= 10000 ? (ctx.parsed.x / 10000) + '万' : ctx.parsed.x.toLocaleString())
               }
+            },
+            datalabels: {
+              display: true,
+              anchor: 'end',
+              align: 'right',
+              color: '#374151',
+              font: { size: 13, weight: 'bold' },
+              formatter: (v) => '¥' + (v >= 10000 ? (v / 10000) + '万' : v.toLocaleString()),
             }
           },
           scales: {
