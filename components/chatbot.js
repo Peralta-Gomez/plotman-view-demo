@@ -17,6 +17,7 @@ let responseIndex = 0;
 function saveChat() {
   localStorage.setItem('chatbotMessages', JSON.stringify(chatMessages));
   localStorage.setItem('chatbotOpen', chatbotOpen ? '1' : '0');
+  localStorage.setItem('chatbotMinimized', chatbotMinimized ? '1' : '0');
   localStorage.setItem('chatbotResponseIndex', responseIndex);
 }
 
@@ -73,6 +74,13 @@ function loadChatbot() {
   if (localStorage.getItem('chatbotOpen') === '1') {
     chatbotOpen = true;
     panel.classList.remove('hidden');
+    if (localStorage.getItem('chatbotMinimized') === '1') {
+      chatbotMinimized = true;
+      const win = document.getElementById('chatbotWindow');
+      const body = document.getElementById('chatbotBody');
+      win.style.height = 'auto';
+      body.style.display = 'none';
+    }
   }
 }
 
@@ -101,6 +109,7 @@ function minimizeChatbot() {
   const body = document.getElementById('chatbotBody');
   win.style.height = 'auto';
   body.style.display = 'none';
+  saveChat();
 }
 
 function restoreChatbot() {
@@ -110,6 +119,7 @@ function restoreChatbot() {
   win.style.height = '450px';
   body.style.display = '';
   document.getElementById('chatInput').focus();
+  saveChat();
 }
 
 function addBotMessage(text) {
