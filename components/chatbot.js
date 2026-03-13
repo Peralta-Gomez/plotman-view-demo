@@ -3,6 +3,7 @@ let chatbotMinimized = false;
 let chatMessages = [];
 
 const botResponses = [
+  'こんにちは',
   'ランチプレートが今月の人気メニューです。',
   'アンケート結果によると、全体満足度は4.2です。',
   '先月と比較して売上が12%増加しています。',
