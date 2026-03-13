@@ -228,6 +228,7 @@
 <!-- Shared Components -->
 <script src="components/header.js"></script>
 <script src="components/sidebar.js"></script>
+<script src="components/chatbot.js"></script>
 <!-- Charts Script -->
 <script>
     // Satisfaction Over Time - Line Chart
@@ -396,6 +397,7 @@
     window.onload = () => {
       loadHeader();
       loadSidebar('survey');
+      loadChatbot();
       drawSatisfactionChart('satisfactionChart');
       drawVolumeChart('volumeChart');
     };

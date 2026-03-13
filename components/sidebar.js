@@ -21,8 +21,12 @@ function loadSidebar(activePage) {
 <aside class="w-48 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col sidebar-transition hidden md:flex h-full" data-purpose="sidebar">
   <nav class="flex-1 py-4 px-3 space-y-1">
     ${navLinks}
+    <button onclick="toggleChatbot()" class="flex items-center gap-3 px-3 py-2.5 text-primary hover:bg-primary/10 rounded-lg w-full transition-colors">
+      <i class="fa-solid fa-robot w-5"></i>
+      <span class="font-bold">チャット</span>
+    </button>
   </nav>
-  <div class="p-3 border-t border-gray-100">
+  <div class="p-3 border-t border-gray-100 space-y-1">
     <button class="flex items-center gap-3 px-3 py-2.5 text-gray-500 hover:text-red-600 w-full transition-colors">
       <i class="fa-solid fa-right-from-bracket w-5"></i>
       <span class="font-medium">ログアウト</span>

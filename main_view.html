@@ -155,6 +155,7 @@
 <!-- Shared Components -->
 <script src="components/header.js"></script>
 <script src="components/sidebar.js"></script>
+<script src="components/chatbot.js"></script>
 <!-- Charts Script -->
 <script data-purpose="canvas-setup">
     const salesData = {
@@ -426,6 +427,7 @@
     window.onload = () => {
       loadHeader();
       loadSidebar('sales');
+      loadChatbot();
       drawLineChartJS('salesChart');
       drawBarChartJS('barChart');
       drawPieChartItem('pieChartItem');
