@@ -48,19 +48,30 @@
 <div id="shared-sidebar"></div>
 <!-- END: LeftSidebar -->
 <!-- BEGIN: MainContent -->
-<main class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
+<main class="flex-1 overflow-hidden p-4 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
 <div class="grid grid-cols-12 gap-4 w-full flex-1" style="grid-template-rows: auto auto 1fr 1fr;">
 
 
 <!-- ROW 0: Item Selector -->
-<section class="col-span-12 flex items-center gap-4">
+<section class="col-span-12 flex items-center gap-6">
   <div class="flex items-center gap-3">
-    <label class="text-xs font-bold uppercase tracking-wider text-gray-400">メニュー選択</label>
-    <select id="itemSelector" class="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2 pr-8 text-sm font-medium focus:ring-2 focus:ring-primary/50 outline-none">
-      <option>ランチプレート</option>
-      <option>ラーメン</option>
-      <option>カレー</option>
-      <option>スマートミール</option>
+    <label class="text-sm font-bold uppercase tracking-wider text-gray-400">検索</label>
+    <div class="relative">
+      <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+      <input id="itemSearch" type="text" placeholder="メニュー名を入力..."
+        class="bg-white border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-base font-medium focus:ring-2 focus:ring-primary/50 outline-none w-56"
+        autocomplete="off" />
+    </div>
+  </div>
+  <div class="flex items-center gap-3">
+    <label class="text-sm font-bold uppercase tracking-wider text-gray-400">分類</label>
+    <select id="classSelector" class="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-8 text-base font-medium focus:ring-2 focus:ring-primary/50 outline-none">
+      <option value="all">すべて</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-3">
+    <label class="text-sm font-bold uppercase tracking-wider text-gray-400">メニュー選択</label>
+    <select id="itemSelector" class="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-8 text-base font-medium focus:ring-2 focus:ring-primary/50 outline-none">
     </select>
   </div>
 </section>
@@ -73,8 +84,8 @@
   <div>
     <p class="text-sm text-gray-500 font-medium">日別平均販売数</p>
     <div class="flex items-baseline gap-2">
-      <p class="text-3xl font-bold text-gray-900">30食</p>
-      <span class="text-sm font-bold text-emerald-500">+5.2%</span>
+      <p id="kpiDaily" class="text-3xl font-bold text-gray-900">0食</p>
+      <span id="kpiDailyPct" class="text-sm font-bold text-gray-400">-</span>
     </div>
   </div>
 </section>
@@ -86,8 +97,8 @@
   <div>
     <p class="text-sm text-gray-500 font-medium">月別平均販売数</p>
     <div class="flex items-baseline gap-2">
-      <p class="text-3xl font-bold text-gray-900">400食</p>
-      <span class="text-sm font-bold text-emerald-500">+12.4%</span>
+      <p id="kpiMonthly" class="text-3xl font-bold text-gray-900">0食</p>
+      <span id="kpiMonthlyPct" class="text-sm font-bold text-gray-400">-</span>
     </div>
   </div>
 </section>
@@ -99,8 +110,8 @@
   <div>
     <p class="text-sm text-gray-500 font-medium">アンケート評価</p>
     <div class="flex items-baseline gap-2">
-      <p class="text-3xl font-bold text-gray-900">4.5 <span class="text-xl font-normal text-gray-400">/ 5.0</span></p>
-      <span class="text-sm font-bold text-emerald-500">+0.2</span>
+      <p id="kpiRating" class="text-3xl font-bold text-gray-900">0 <span class="text-xl font-normal text-gray-400">/ 5.0</span></p>
+      <span id="kpiRatingPct" class="text-sm font-bold text-gray-400">-</span>
     </div>
   </div>
 </section>
@@ -108,59 +119,8 @@
 <!-- Frequently Bought With (spans all 3 rows on the right) -->
 <section class="col-span-3 row-span-3 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="frequently-bought">
   <h2 class="text-xl font-bold text-gray-800 mb-4">よく一緒に購入される商品</h2>
-  <div class="space-y-3 flex-1">
-    <div class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors">
-      <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-        <i class="fa-solid fa-bowl-food text-primary"></i>
-      </div>
-      <div class="flex-1 min-w-0">
-        <h4 class="font-bold text-base text-gray-800">豚汁</h4>
-        <p class="text-sm text-gray-400">サイド</p>
-      </div>
-      <div class="text-right flex-shrink-0">
-        <p class="text-xl font-black text-primary">30%</p>
-        <p class="text-xs font-bold text-gray-400 uppercase">頻度</p>
-      </div>
-    </div>
-    <div class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors">
-      <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-        <i class="fa-solid fa-mug-hot text-primary"></i>
-      </div>
-      <div class="flex-1 min-w-0">
-        <h4 class="font-bold text-base text-gray-800">ご飯/味噌汁</h4>
-        <p class="text-sm text-gray-400">サイド</p>
-      </div>
-      <div class="text-right flex-shrink-0">
-        <p class="text-xl font-black text-primary">22%</p>
-        <p class="text-xs font-bold text-gray-400 uppercase">頻度</p>
-      </div>
-    </div>
-    <div class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors">
-      <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-        <i class="fa-solid fa-apple-whole text-primary"></i>
-      </div>
-      <div class="flex-1 min-w-0">
-        <h4 class="font-bold text-base text-gray-800">ｻﾗﾀﾞﾎﾞｳﾙ</h4>
-        <p class="text-sm text-gray-400">サイド</p>
-      </div>
-      <div class="text-right flex-shrink-0">
-        <p class="text-xl font-black text-primary">15%</p>
-        <p class="text-xs font-bold text-gray-400 uppercase">頻度</p>
-      </div>
-    </div>
-    <div class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors">
-      <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-        <i class="fa-solid fa-cookie text-primary"></i>
-      </div>
-      <div class="flex-1 min-w-0">
-        <h4 class="font-bold text-base text-gray-800">パン１個</h4>
-        <p class="text-sm text-gray-400">デザート</p>
-      </div>
-      <div class="text-right flex-shrink-0">
-        <p class="text-xl font-black text-primary">12%</p>
-        <p class="text-xs font-bold text-gray-400 uppercase">頻度</p>
-      </div>
-    </div>
+  <div id="frequentlyBoughtList" class="space-y-3 flex-1">
+    <p class="text-sm text-gray-400 italic mt-4">メニューを選択してください</p>
   </div>
 </section>
 
@@ -194,20 +154,20 @@
     <div class="relative flex-1 flex items-center justify-center">
       <canvas id="compositionChart" width="180" height="180"></canvas>
       <div class="absolute inset-0 flex flex-col items-center justify-center">
-        <p class="text-3xl font-black text-gray-900">65%</p>
-        <p class="text-[10px] font-bold text-gray-400 uppercase">セット</p>
+        <p id="compositionPct" class="text-3xl font-black text-gray-900">0%</p>
+        <p class="text-[14px] font-bold text-gray-400 uppercase">セット</p>
       </div>
     </div>
     <div class="flex gap-6 mt-3">
       <div class="flex items-center gap-2">
-        <div class="w-3 h-3 rounded-full bg-primary"></div>
-        <span class="text-sm font-medium text-gray-700">セット</span>
-        <span class="text-sm font-bold text-gray-900">65%</span>
+        <div class="w-3.5 h-3.5 rounded-full bg-primary"></div>
+        <span class="text-[15px] font-medium text-gray-700">セット</span>
+        <span id="compositionSetPct" class="text-[15px] font-bold text-gray-900">0%</span>
       </div>
       <div class="flex items-center gap-2">
-        <div class="w-3 h-3 rounded-full bg-gray-200"></div>
-        <span class="text-sm font-medium text-gray-700">単品</span>
-        <span class="text-sm font-bold text-gray-900">35%</span>
+        <div class="w-3.5 h-3.5 rounded-full bg-gray-200"></div>
+        <span class="text-[15px] font-medium text-gray-700">単品</span>
+        <span id="compositionSinglePct" class="text-[15px] font-bold text-gray-900">0%</span>
       </div>
     </div>
   </div>
@@ -227,12 +187,207 @@
 <script src="components/sidebar.js"></script>
 <!-- Charts Script -->
 <script>
-    // Sales Performance Trend - Line Chart
-    const trendData = {
-      'week':  { labels: ['月','火','水','木','金'], data: [28, 32, 25, 35, 30] },
-      'month': { labels: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'], data: [70, 93, 85, 101, 92, 105, 77, 91, 82, 110, 95, 89] },
-      'year':  { labels: ['2020','2021','2022','2023','2024'], data: [400, 370, 495, 460, 500] },
+    // Menu items data with class categories
+    const menuItems = [
+      { name: 'ランチプレート', class: 'メイン料理' },
+      { name: 'ラーメン', class: 'メイン料理' },
+      { name: 'カレー', class: 'メイン料理' },
+      { name: 'スマートミール', class: 'メイン料理' },
+      { name: 'Live Kitchen', class: 'メイン料理' },
+      { name: 'うどん・そば', class: 'メイン料理' },
+      { name: 'ボウル', class: 'サイドメニュー' },
+      { name: 'サラダボール', class: 'サイドメニュー' },
+      { name: '豚汁', class: 'サイドメニュー' },
+      { name: 'ご飯/味噌汁', class: 'サイドメニュー' },
+      { name: 'パン１個', class: 'サイドメニュー' },
+    ];
+
+    const plateClasses = [...new Set(menuItems.map(i => i.class))];
+
+    function populateClassSelector() {
+      const sel = document.getElementById('classSelector');
+      sel.innerHTML = '<option value="all">分類を選択</option>';
+      plateClasses.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        sel.appendChild(opt);
+      });
+    }
+
+    function populateItemSelector() {
+      const classSel = document.getElementById('classSelector');
+      const itemSel = document.getElementById('itemSelector');
+      const searchVal = document.getElementById('itemSearch').value.toLowerCase();
+      const selectedClass = classSel.value;
+
+      let filtered = menuItems;
+      if (selectedClass !== 'all') {
+        filtered = filtered.filter(i => i.class === selectedClass);
+      }
+      if (searchVal) {
+        filtered = filtered.filter(i => i.name.toLowerCase().includes(searchVal));
+      }
+
+      const prevValue = itemSel.value;
+      itemSel.innerHTML = '<option value="" disabled selected>メニューを選択</option>';
+      filtered.forEach(i => {
+        const opt = document.createElement('option');
+        opt.value = i.name;
+        opt.textContent = i.name;
+        itemSel.appendChild(opt);
+      });
+
+      // Restore previous selection if still in filtered list
+      if (filtered.some(i => i.name === prevValue)) {
+        itemSel.value = prevValue;
+      }
+    }
+
+    // Item data store (mock data per item)
+    const itemData = {
+      'ランチプレート': {
+        daily: '30食', dailyPct: '+5.2%', monthly: '400食', monthlyPct: '+12.4%',
+        rating: '4.5', ratingPct: '+0.2',
+        trend: {
+          week: { labels: ['月','火','水','木','金'], data: [28, 32, 25, 35, 30] },
+          month: { labels: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'], data: [70, 93, 85, 101, 92, 105, 77, 91, 82, 110, 95, 89] },
+          year: { labels: ['2020','2021','2022','2023','2024'], data: [400, 370, 495, 460, 500] },
+        },
+        nutrition: [85, 60, 45, 70, 40, 75],
+        composition: [65, 35],
+        bought: [
+          { name: '豚汁', cat: 'サイド', icon: 'fa-bowl-food', pct: '30%' },
+          { name: 'ご飯/味噌汁', cat: 'サイド', icon: 'fa-mug-hot', pct: '22%' },
+          { name: 'ｻﾗﾀﾞﾎﾞｳﾙ', cat: 'サイド', icon: 'fa-apple-whole', pct: '15%' },
+          { name: 'パン１個', cat: 'デザート', icon: 'fa-cookie', pct: '12%' },
+        ],
+      },
+      'ラーメン': {
+        daily: '45食', dailyPct: '+8.7%', monthly: '520食', monthlyPct: '+15.1%',
+        rating: '4.6', ratingPct: '+0.3',
+        trend: {
+          week: { labels: ['月','火','水','木','金'], data: [35, 55, 42, 38, 60] },
+          month: { labels: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'], data: [80, 125, 95, 140, 78, 130, 110, 85, 145, 100, 135, 90] },
+          year: { labels: ['2020','2021','2022','2023','2024'], data: [350, 410, 480, 520, 560] },
+        },
+        nutrition: [70, 80, 55, 30, 65, 45],
+        composition: [45, 55],
+        bought: [
+          { name: 'ご飯/味噌汁', cat: 'サイド', icon: 'fa-mug-hot', pct: '35%' },
+          { name: '豚汁', cat: 'サイド', icon: 'fa-bowl-food', pct: '18%' },
+          { name: 'ｻﾗﾀﾞﾎﾞｳﾙ', cat: 'サイド', icon: 'fa-apple-whole', pct: '14%' },
+          { name: 'パン１個', cat: 'デザート', icon: 'fa-cookie', pct: '8%' },
+        ],
+      },
     };
+
+    // Zero / default data
+    const zeroTrend = {
+      week: { labels: ['月','火','水','木','金'], data: [0,0,0,0,0] },
+      month: { labels: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'], data: [0,0,0,0,0,0,0,0,0,0,0,0] },
+      year: { labels: ['2020','2021','2022','2023','2024'], data: [0,0,0,0,0] },
+    };
+
+    let activeItemData = null;
+
+    function setDefaultState() {
+      document.getElementById('kpiDaily').textContent = '0食';
+      document.getElementById('kpiDailyPct').textContent = '-';
+      document.getElementById('kpiDailyPct').className = 'text-sm font-bold text-gray-400';
+      document.getElementById('kpiMonthly').textContent = '0食';
+      document.getElementById('kpiMonthlyPct').textContent = '-';
+      document.getElementById('kpiMonthlyPct').className = 'text-sm font-bold text-gray-400';
+      document.getElementById('kpiRating').innerHTML = '0 <span class="text-xl font-normal text-gray-400">/ 5.0</span>';
+      document.getElementById('kpiRatingPct').textContent = '-';
+      document.getElementById('kpiRatingPct').className = 'text-sm font-bold text-gray-400';
+      document.getElementById('frequentlyBoughtList').innerHTML = '<p class="text-sm text-gray-400 italic mt-4">メニューを選択してください</p>';
+      document.getElementById('compositionPct').textContent = '0%';
+      document.getElementById('compositionSetPct').textContent = '0%';
+      document.getElementById('compositionSinglePct').textContent = '0%';
+      activeItemData = null;
+      trendData = zeroTrend;
+      drawAllCharts();
+    }
+
+    function loadItemData(name) {
+      const data = itemData[name];
+      if (!data) {
+        setDefaultState();
+        return;
+      }
+      activeItemData = data;
+      document.getElementById('kpiDaily').textContent = data.daily;
+      document.getElementById('kpiDailyPct').textContent = data.dailyPct;
+      document.getElementById('kpiDailyPct').className = 'text-sm font-bold text-emerald-500';
+      document.getElementById('kpiMonthly').textContent = data.monthly;
+      document.getElementById('kpiMonthlyPct').textContent = data.monthlyPct;
+      document.getElementById('kpiMonthlyPct').className = 'text-sm font-bold text-emerald-500';
+      document.getElementById('kpiRating').innerHTML = data.rating + ' <span class="text-xl font-normal text-gray-400">/ 5.0</span>';
+      document.getElementById('kpiRatingPct').textContent = data.ratingPct;
+      document.getElementById('kpiRatingPct').className = 'text-sm font-bold text-emerald-500';
+
+      // Frequently bought
+      const list = document.getElementById('frequentlyBoughtList');
+      if (data.bought.length === 0) {
+        list.innerHTML = '<p class="text-sm text-gray-400 italic mt-4">データなし</p>';
+      } else {
+        list.innerHTML = data.bought.map(b => `
+          <div class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid ${b.icon} text-primary"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h4 class="font-bold text-base text-gray-800">${b.name}</h4>
+              <p class="text-sm text-gray-400">${b.cat}</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p class="text-xl font-black text-primary">${b.pct}</p>
+              <p class="text-xs font-bold text-gray-400 uppercase">頻度</p>
+            </div>
+          </div>`).join('');
+      }
+
+      // Composition labels
+      document.getElementById('compositionPct').textContent = data.composition[0] + '%';
+      document.getElementById('compositionSetPct').textContent = data.composition[0] + '%';
+      document.getElementById('compositionSinglePct').textContent = data.composition[1] + '%';
+
+      trendData = data.trend;
+      drawAllCharts();
+    }
+
+    function initSelectors() {
+      populateClassSelector();
+      populateItemSelector();
+
+      document.getElementById('classSelector').addEventListener('change', populateItemSelector);
+      document.getElementById('itemSearch').addEventListener('input', populateItemSelector);
+      document.getElementById('itemSelector').addEventListener('change', () => {
+        const val = document.getElementById('itemSelector').value;
+        if (val) {
+          loadItemData(val);
+        }
+      });
+
+      // Pre-select from URL param
+      const urlItem = new URLSearchParams(window.location.search).get('item');
+      if (urlItem) {
+        const match = menuItems.find(i => i.name === urlItem);
+        if (match) {
+          document.getElementById('classSelector').value = match.class;
+          populateItemSelector();
+          document.getElementById('itemSelector').value = urlItem;
+          loadItemData(urlItem);
+          return;
+        }
+      }
+      // Default: show zero state
+      setDefaultState();
+    }
+
+    // Sales Performance Trend - Line Chart
+    let trendData = zeroTrend;
     let currentTrendRange = 'month';
 
     function switchTrendRange(range) {
@@ -323,13 +478,14 @@
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
       if (nutritionalInstance) nutritionalInstance.destroy();
+      const data = activeItemData ? activeItemData.nutrition : [0, 0, 0, 0, 0, 0];
       nutritionalInstance = new Chart(canvas, {
         type: 'radar',
         data: {
           labels: ['たんぱく質', '炭水化物', '脂質', '食物繊維', 'ナトリウム', 'ビタミン'],
           datasets: [{
             label: '栄養プロフィール',
-            data: [85, 60, 45, 70, 40, 75],
+            data: data,
             backgroundColor: 'rgba(48, 161, 175, 0.2)',
             borderColor: '#30a1af',
             borderWidth: 2,
@@ -374,12 +530,13 @@
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
       if (compositionInstance) compositionInstance.destroy();
+      const data = activeItemData ? activeItemData.composition : [0, 0];
       compositionInstance = new Chart(canvas, {
         type: 'doughnut',
         data: {
           labels: ['セット', '単品'],
           datasets: [{
-            data: [65, 35],
+            data: data,
             backgroundColor: ['#30a1af', '#e5e7eb'],
             borderWidth: 0,
           }]
@@ -399,18 +556,20 @@
       });
     }
 
+    function drawAllCharts() {
+      drawSalesTrend('salesTrendChart');
+      drawNutritionalChart('nutritionalChart');
+      drawCompositionChart('compositionChart');
+    }
+
     window.onload = () => {
       loadHeader();
       loadSidebar('items');
-      drawSalesTrend('salesTrendChart');
-      drawNutritionalChart('nutritionalChart');
-      drawCompositionChart('compositionChart');
+      initSelectors();
     };
 
     window.onresize = () => {
-      drawSalesTrend('salesTrendChart');
-      drawNutritionalChart('nutritionalChart');
-      drawCompositionChart('compositionChart');
+      drawAllCharts();
     };
   </script>
 </body></html>
