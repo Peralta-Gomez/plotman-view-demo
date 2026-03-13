@@ -3,10 +3,10 @@ function loadSidebar(activePage) {
   if (!sidebar) return;
 
   const pages = [
-    { id: 'sales', icon: 'fa-chart-line', label: 'Sales Analysis', href: 'main_view.html' },
-    { id: 'items', icon: 'fa-magnifying-glass-chart', label: 'Item Details', href: 'item_details.html' },
-    { id: 'inventory', icon: 'fa-boxes-stacked', label: 'Inventory', href: '#' },
-    { id: 'survey', icon: 'fa-clipboard-list', label: 'Survey', href: 'survey.html' },
+    { id: 'sales', icon: 'fa-chart-line', label: '売上分析', href: 'main_view.html' },
+    { id: 'items', icon: 'fa-magnifying-glass-chart', label: '商品詳細', href: 'item_details.html' },
+    { id: 'inventory', icon: 'fa-boxes-stacked', label: '在庫管理', href: '#' },
+    { id: 'survey', icon: 'fa-clipboard-list', label: 'アンケート', href: 'survey.html' },
   ];
 
   const navLinks = pages.map(p => {
@@ -25,7 +25,7 @@ function loadSidebar(activePage) {
   <div class="p-3 border-t border-gray-100">
     <button class="flex items-center gap-3 px-3 py-2.5 text-gray-500 hover:text-red-600 w-full transition-colors">
       <i class="fa-solid fa-right-from-bracket w-5"></i>
-      <span class="font-medium">Logout</span>
+      <span class="font-medium">ログアウト</span>
     </button>
   </div>
 </aside>`;
