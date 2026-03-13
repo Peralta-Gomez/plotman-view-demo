@@ -13,6 +13,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script>
     tailwind.config = {
       theme: {
@@ -59,8 +60,8 @@
 <div id="shared-sidebar"></div>
 <!-- END: LeftSidebar -->
 <!-- BEGIN: MainContent -->
-<main class="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
-<div class="grid grid-cols-12 gap-4 w-full flex-1" style="grid-template-rows: auto 2fr 3fr;">
+<main class="flex-1 overflow-hidden p-4 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
+<div class="grid grid-cols-12 gap-4 w-full flex-1 min-h-0" style="grid-template-rows: auto 2fr 3fr;">
 <!-- ROW 1 COL 1: Overall Rating -->
 <section class="col-span-3 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center" data-purpose="overall-rating">
   <div class="flex items-center justify-between mb-2">
@@ -92,35 +93,35 @@
 </section>
 
 <!-- Menu Item Satisfaction Ranking (spans all 3 rows) -->
-<section class="col-span-3 row-span-3 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="ranking-section">
+<section class="col-span-2 row-span-3 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="ranking-section">
   <h2 class="text-xl font-bold text-gray-800 mb-4">メニュー満足度ランキング</h2>
   <div class="space-y-3 flex-1 overflow-y-auto custom-scrollbar pr-1">
-    <div class="flex justify-between items-center py-2 border-b border-gray-50 cursor-pointer hover:bg-gray-50 rounded transition-colors" ondblclick="window.location.href='item_details.html?item=ランチプレート'">
-      <span class="text-base font-medium text-gray-700">ランチプレート</span>
+    <div class="flex justify-between items-center py-2 border-b border-gray-50 cursor-pointer hover:bg-gray-50 rounded transition-colors" onclick="window.location.href='item_details.html?item=ランチプレート'">
+      <span class="text-base font-medium text-primary">ランチプレート</span>
       <span class="text-base text-primary font-bold">4.8 <i class="fa-solid fa-star text-xs"></i></span>
     </div>
-    <div class="flex justify-between items-center py-2 border-b border-gray-50 cursor-pointer hover:bg-gray-50 rounded transition-colors" ondblclick="window.location.href='item_details.html?item=ラーメン'">
-      <span class="text-base font-medium text-gray-700">ラーメン</span>
+    <div class="flex justify-between items-center py-2 border-b border-gray-50 cursor-pointer hover:bg-gray-50 rounded transition-colors" onclick="window.location.href='item_details.html?item=ラーメン'">
+      <span class="text-base font-medium text-primary">ラーメン</span>
       <span class="text-base text-primary font-bold">4.6 <i class="fa-solid fa-star text-xs"></i></span>
     </div>
     <div class="flex justify-between items-center py-2 border-b border-gray-50">
-      <span class="text-base font-medium text-gray-700">スマートミール</span>
+      <span class="text-base font-medium text-gray-400">スマートミール</span>
       <span class="text-base text-primary font-bold">4.5 <i class="fa-solid fa-star text-xs"></i></span>
     </div>
     <div class="flex justify-between items-center py-2 border-b border-gray-50">
-      <span class="text-base font-medium text-gray-700">カレー</span>
+      <span class="text-base font-medium text-gray-400">カレー</span>
       <span class="text-base text-primary font-bold">4.3 <i class="fa-solid fa-star text-xs"></i></span>
     </div>
     <div class="flex justify-between items-center py-2 border-b border-gray-50">
-      <span class="text-base font-medium text-gray-700">Live Kitchen</span>
+      <span class="text-base font-medium text-gray-400">Live Kitchen</span>
       <span class="text-base text-primary font-bold">4.1 <i class="fa-solid fa-star text-xs"></i></span>
     </div>
     <div class="flex justify-between items-center py-2 border-b border-gray-50">
-      <span class="text-base font-medium text-gray-700">ボウル</span>
+      <span class="text-base font-medium text-gray-400">ボウル</span>
       <span class="text-base text-primary font-bold">3.9 <i class="fa-solid fa-star text-xs"></i></span>
     </div>
     <div class="flex justify-between items-center py-2 border-b border-gray-50">
-      <span class="text-base font-medium text-gray-700">サラダボール</span>
+      <span class="text-base font-medium text-gray-400">サラダボール</span>
       <span class="text-base text-primary font-bold">3.7 <i class="fa-solid fa-star text-xs"></i></span>
     </div>
     <div class="flex justify-between items-center py-2 border-b border-gray-50">
@@ -134,59 +135,17 @@
   </div>
 </section>
 
-<!-- Recent Feedback (spans all 3 rows) -->
-<section class="col-span-3 row-span-3 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="feedback-section">
-  <h2 class="text-xl font-bold text-gray-800 mb-4">最近のフィードバック</h2>
-  <div class="space-y-3 flex-1 overflow-y-auto custom-scrollbar pr-1">
-    <div class="p-4 bg-gray-50 rounded-lg">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-sm font-bold text-primary">5.0 <i class="fa-solid fa-star text-[10px]"></i></span>
-        <span class="text-xs text-gray-400">2時間前</span>
-      </div>
-      <p class="text-base text-gray-600 italic">「今日のサーモンボウルは最高でした！味付けが完璧。」</p>
+<!-- Surveys Volume (spans all 3 rows, right column) -->
+<section class="col-span-4 row-span-3 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="volume-chart">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-xl font-bold text-gray-800">アンケート回答数</h2>
+    <div class="flex gap-2" id="volBtns">
+      <button class="px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 text-gray-500" data-range="month" onclick="switchVolRange('month')">月</button>
+      <button class="px-3 py-1 text-xs font-bold rounded-lg bg-primary text-white" data-range="year" onclick="switchVolRange('year')">年</button>
     </div>
-    <div class="p-4 bg-gray-50 rounded-lg">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-sm font-bold text-primary">4.0 <i class="fa-solid fa-star text-[10px]"></i></span>
-        <span class="text-xs text-gray-400">5時間前</span>
-      </div>
-      <p class="text-base text-gray-600 italic">「ピーク時でもサービスが早くて助かります。」</p>
-    </div>
-    <div class="p-4 bg-gray-50 rounded-lg">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-sm font-bold text-orange-400">2.0 <i class="fa-solid fa-star text-[10px]"></i></span>
-        <span class="text-xs text-gray-400">1日前</span>
-      </div>
-      <p class="text-base text-gray-600 italic">「豚汁がぬるかったです。いつもはもっと美味しいのに。」</p>
-    </div>
-    <div class="p-4 bg-gray-50 rounded-lg">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-sm font-bold text-primary">4.5 <i class="fa-solid fa-star text-[10px]"></i></span>
-        <span class="text-xs text-gray-400">1日前</span>
-      </div>
-      <p class="text-base text-gray-600 italic">「雰囲気が良く、スタッフの対応もとても親切でした。」</p>
-    </div>
-    <div class="p-4 bg-gray-50 rounded-lg">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-sm font-bold text-primary">3.5 <i class="fa-solid fa-star text-[10px]"></i></span>
-        <span class="text-xs text-gray-400">2日前</span>
-      </div>
-      <p class="text-base text-gray-600 italic">「量は十分ですが、サイドメニューの種類を増やしてほしい。」</p>
-    </div>
-    <div class="p-4 bg-gray-50 rounded-lg">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-sm font-bold text-primary">4.8 <i class="fa-solid fa-star text-[10px]"></i></span>
-        <span class="text-xs text-gray-400">2日前</span>
-      </div>
-      <p class="text-base text-gray-600 italic">「今まで食べた社食の中で一番美味しい！ラーメンが最高！」</p>
-    </div>
-    <div class="p-4 bg-gray-50 rounded-lg">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-sm font-bold text-orange-400">1.5 <i class="fa-solid fa-star text-[10px]"></i></span>
-        <span class="text-xs text-gray-400">3日前</span>
-      </div>
-      <p class="text-base text-gray-600 italic">「昼食時の待ち時間が長すぎます。スタッフを増やしてほしい。」</p>
-    </div>
+  </div>
+  <div class="chart-container flex-1 relative">
+    <canvas id="volumeChart"></canvas>
   </div>
 </section>
 
@@ -204,17 +163,59 @@
   </div>
 </section>
 
-<!-- ROW 3: Surveys Volume -->
-<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="volume-chart">
-  <div class="flex items-center justify-between mb-3">
-    <h2 class="text-xl font-bold text-gray-800">アンケート回答数</h2>
-    <div class="flex gap-2" id="volBtns">
-      <button class="px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 text-gray-500" data-range="month" onclick="switchVolRange('month')">月</button>
-      <button class="px-3 py-1 text-xs font-bold rounded-lg bg-primary text-white" data-range="year" onclick="switchVolRange('year')">年</button>
+<!-- ROW 3: Recent Feedback -->
+<section class="col-span-6 bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col min-h-0 overflow-hidden" data-purpose="feedback-section">
+  <h2 class="text-xl font-bold text-gray-800 mb-4">最近のフィードバック</h2>
+  <div class="space-y-3 flex-1 overflow-y-auto custom-scrollbar pr-1">
+    <div class="p-4 bg-gray-50 rounded-lg ">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-sm font-bold text-primary">5.0 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-xs text-gray-400">2時間前</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">「今日のサーモンボウルは最高でした！味付けが完璧。」</p>
     </div>
-  </div>
-  <div class="chart-container flex-1 relative">
-    <canvas id="volumeChart"></canvas>
+    <div class="p-4 bg-gray-50 rounded-lg ">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-sm font-bold text-primary">4.0 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-xs text-gray-400">5時間前</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">「ピーク時でもサービスが早くて助かります。」</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg ">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-sm font-bold text-orange-400">2.0 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-xs text-gray-400">1日前</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">「豚汁がぬるかったです。いつもはもっと美味しいのに。」</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg ">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-sm font-bold text-primary">4.5 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-xs text-gray-400">1日前</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">「雰囲気が良く、スタッフの対応もとても親切でした。」</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg ">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-sm font-bold text-primary">3.5 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-xs text-gray-400">2日前</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">「量は十分ですが、サイドメニューの種類を増やしてほしい。」</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg ">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-sm font-bold text-primary">4.8 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-xs text-gray-400">2日前</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">「今まで食べた社食の中で一番美味しい！ラーメンが最高！」</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg ">
+      <div class="flex justify-between items-start mb-2">
+        <span class="text-sm font-bold text-orange-400">1.5 <i class="fa-solid fa-star text-[10px]"></i></span>
+        <span class="text-xs text-gray-400">3日前</span>
+      </div>
+      <p class="text-sm text-gray-600 italic">「昼食時の待ち時間が長すぎます。スタッフを増やしてほしい。」</p>
+    </div>
   </div>
 </section>
 </div>
@@ -232,6 +233,9 @@
 <script src="components/chatbot.js"></script>
 <!-- Charts Script -->
 <script>
+    Chart.register(ChartDataLabels);
+    Chart.defaults.plugins.datalabels.display = false;
+
     // Satisfaction Over Time - Line Chart
     const satData = {
       'month': { labels: ['1月','2月','3月','4月','5月','6月'], data: [3.8, 3.9, 4.0, 4.3, 4.1, 4.2] },
@@ -359,23 +363,32 @@
             label: 'アンケート',
             data: d.data,
             backgroundColor: '#30a1af',
-            borderRadius: 4,
+            borderRadius: 3,
             barPercentage: 0.6,
           }]
         },
         options: {
+          indexAxis: 'y',
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: ctx => ctx.parsed.y + ' 件'
+                label: ctx => ctx.parsed.x + ' 件'
               }
+            },
+            datalabels: {
+              display: true,
+              anchor: 'end',
+              align: 'right',
+              color: '#374151',
+              font: { size: 12, weight: 'bold' },
+              formatter: (v) => v + '件',
             }
           },
           scales: {
-            y: {
+            x: {
               beginAtZero: true,
               ticks: {
                 color: '#9ca3af',
@@ -383,10 +396,10 @@
               },
               grid: { color: '#f3f4f6' }
             },
-            x: {
+            y: {
               ticks: {
-                color: '#9ca3af',
-                font: { size: 14 }
+                color: '#6b7280',
+                font: { size: 14, weight: '500' }
               },
               grid: { display: false }
             }
