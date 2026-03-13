@@ -74,16 +74,16 @@
 <!-- MIDDLE: Metric Cards -->
 <section class="col-span-2 flex flex-col gap-3 max-h-[400px]" data-purpose="metric-summaries">
 <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
-<p class="text-sm text-gray-500 font-medium uppercase tracking-wider">今年の平均売上</p>
-<p class="text-3xl font-bold text-gray-900 mt-1">¥40万</p>
+<p id="metricSalesLabel" class="text-sm text-gray-500 font-medium uppercase tracking-wider">今年の平均売上</p>
+<p id="metricSalesValue" class="text-3xl font-bold text-gray-900 mt-1">¥40万</p>
 </div>
 <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
 <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">平均取引額</p>
-<p class="text-3xl font-bold text-gray-900 mt-1">¥4,021</p>
+<p id="metricAvgTx" class="text-3xl font-bold text-gray-900 mt-1">¥4,021</p>
 </div>
 <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
 <p class="text-sm text-gray-500 font-medium uppercase tracking-wider">1日平均来客数</p>
-<p class="text-3xl font-bold text-gray-900 mt-1">70名</p>
+<p id="metricVisitors" class="text-3xl font-bold text-gray-900 mt-1">70名</p>
 </div>
 </section>
 <!-- TOP RIGHT: KPI Section -->
@@ -164,6 +164,35 @@
       'month': { labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'], data: [18000,22000,15000,28000,32000,24000,12000,35000,29000,41000,38000,19000,27000,33000,45000,21000,37000,42000,30000,26000,48000,35000,20000,31000,44000,39000,17000,25000,36000,40000], max: 60000 },
       'year':  { labels: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'], data: [120000, 185000, 210000, 175000, 245000, 290000, 260000, 310000, 340000, 295000, 365000, 400000], max: 400000 },
     };
+
+    // Per-timeframe data for bar chart (day-of-week avg sales)
+    const barData = {
+      'week':  { data: [58000, 72000, 85000, 64000, 95000], max: 120000 },
+      'month': { data: [185000, 245000, 312000, 198000, 410000], max: 500000 },
+      'year':  { data: [185000, 245000, 312000, 198000, 410000], max: 500000 },
+    };
+
+    // Per-timeframe data for category pie chart
+    const categoryData = {
+      'week':  [38, 30, 20, 12],
+      'month': [40, 29, 20, 11],
+      'year':  [42, 28, 19, 11],
+    };
+
+    // Per-timeframe data for payment doughnut
+    const paymentData = {
+      'week':  [40, 28, 22, 10],
+      'month': [37, 30, 24, 9],
+      'year':  [35, 30, 25, 10],
+    };
+
+    // Per-timeframe metric cards
+    const metricData = {
+      'week':  { salesLabel: '今週の平均売上', sales: '¥7.5万', avgTx: '¥3,850', visitors: '65名' },
+      'month': { salesLabel: '今月の平均売上', sales: '¥30万', avgTx: '¥3,940', visitors: '68名' },
+      'year':  { salesLabel: '今年の平均売上', sales: '¥40万', avgTx: '¥4,021', visitors: '70名' },
+    };
+
     let currentSalesRange = 'year';
 
     function switchSalesRange(range) {
@@ -175,15 +204,44 @@
           btn.className = 'px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 text-gray-500';
         }
       });
+
+      // Update line chart
       if (salesChartInstance) {
         const d = salesData[currentSalesRange];
         salesChartInstance.data.labels = d.labels;
         salesChartInstance.data.datasets[0].data = d.data;
         salesChartInstance.options.scales.y.max = d.max;
         salesChartInstance.update();
-        return;
+      } else {
+        drawLineChartJS('salesChart');
       }
-      drawLineChartJS('salesChart');
+
+      // Update bar chart
+      if (barChartInstance) {
+        const bd = barData[currentSalesRange];
+        barChartInstance.data.datasets[0].data = bd.data;
+        barChartInstance.options.scales.x.max = bd.max;
+        barChartInstance.update();
+      }
+
+      // Update category pie
+      if (pieItemInstance) {
+        pieItemInstance.data.datasets[0].data = categoryData[currentSalesRange];
+        pieItemInstance.update();
+      }
+
+      // Update payment doughnut
+      if (piePaymentInstance) {
+        piePaymentInstance.data.datasets[0].data = paymentData[currentSalesRange];
+        piePaymentInstance.update();
+      }
+
+      // Update metric cards
+      const m = metricData[currentSalesRange];
+      document.getElementById('metricSalesLabel').textContent = m.salesLabel;
+      document.getElementById('metricSalesValue').textContent = m.sales;
+      document.getElementById('metricAvgTx').textContent = m.avgTx;
+      document.getElementById('metricVisitors').textContent = m.visitors;
     }
 
     let salesChartInstance = null;
