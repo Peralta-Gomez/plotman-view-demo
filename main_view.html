@@ -158,6 +158,11 @@
 <script src="components/sidebar.js"></script>
 <script src="components/chatbot.js"></script>
 <!-- Charts Script -->
+<script>
+    // Fixed 1920x1080 viewport — disable Chart.js responsive mode to prevent
+    // ResizeObserver feedback loops with CSS transform scaling
+    Chart.defaults.responsive = false;
+</script>
 <script data-purpose="canvas-setup">
     const salesData = {
       'week':  { labels: ['月','火','水','木','金'], data: [58000, 72000, 85000, 64000, 95000], max: 120000 },
@@ -192,6 +197,13 @@
       'month': { salesLabel: '今月の平均売上', sales: '¥30万', avgTx: '¥3,940', visitors: '68名' },
       'year':  { salesLabel: '今年の平均売上', sales: '¥40万', avgTx: '¥4,021', visitors: '70名' },
     };
+
+    // Set canvas size to match its parent container (used because responsive:false)
+    function sizeCanvas(canvas) {
+      const parent = canvas.parentElement;
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
+    }
 
     let currentSalesRange = 'year';
 
@@ -250,6 +262,7 @@
       if (!canvas) return;
       if (salesChartInstance) salesChartInstance.destroy();
       const d = salesData[currentSalesRange];
+      sizeCanvas(canvas);
       salesChartInstance = new Chart(canvas, {
         type: 'line',
         data: {
@@ -276,8 +289,6 @@
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
           plugins: {
             legend: { display: false },
             tooltip: {
@@ -314,6 +325,7 @@
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
       if (barChartInstance) barChartInstance.destroy();
+      sizeCanvas(canvas);
       barChartInstance = new Chart(canvas, {
         type: 'bar',
         data: {
@@ -328,8 +340,6 @@
         },
         options: {
           indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
           plugins: {
             legend: { display: false },
             tooltip: {
@@ -366,6 +376,7 @@
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
       if (pieItemInstance) pieItemInstance.destroy();
+      sizeCanvas(canvas);
       pieItemInstance = new Chart(canvas, {
         type: 'pie',
         data: {
@@ -378,8 +389,6 @@
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
           plugins: {
             legend: {
               position: 'bottom',
@@ -406,6 +415,7 @@
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
       if (piePaymentInstance) piePaymentInstance.destroy();
+      sizeCanvas(canvas);
       piePaymentInstance = new Chart(canvas, {
         type: 'doughnut',
         data: {
@@ -418,8 +428,6 @@
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
           cutout: '55%',
           plugins: {
             legend: {
@@ -447,6 +455,7 @@
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
       if (kpiInstances[canvasId]) kpiInstances[canvasId].destroy();
+      sizeCanvas(canvas);
       kpiInstances[canvasId] = new Chart(canvas, {
         type: 'doughnut',
         data: {
@@ -457,8 +466,6 @@
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
           cutout: '72%',
           plugins: {
             legend: { display: false },
@@ -494,12 +501,6 @@
       drawAllKpis();
     };
 
-    window.onresize = () => {
-      drawLineChartJS('salesChart');
-      drawBarChartJS('barChart');
-      drawPieChartItem('pieChartItem');
-      drawPieChartPayment('pieChartPayment');
-      drawAllKpis();
-    };
+    // Charts handle resize automatically via responsive:true
   </script>
 </body></html>
