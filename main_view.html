@@ -213,6 +213,12 @@
       canvas.height = parent.clientHeight;
     }
 
+    const comparisonLabels = {
+      'week':  { prev: '先週', current: '今週' },
+      'month': { prev: '先月', current: '今月' },
+      'year':  { prev: '去年', current: '今年' },
+    };
+
     let currentSalesRange = 'year';
 
     function switchSalesRange(range) {
@@ -225,11 +231,15 @@
         }
       });
 
+      const labels = comparisonLabels[currentSalesRange];
+
       // Update overall sales bar chart
       if (salesChartInstance) {
         const d = salesData[currentSalesRange];
         salesChartInstance.data.labels = d.labels;
+        salesChartInstance.data.datasets[0].label = labels.prev;
         salesChartInstance.data.datasets[0].data = d.prev;
+        salesChartInstance.data.datasets[1].label = labels.current;
         salesChartInstance.data.datasets[1].data = d.data;
         salesChartInstance.options.scales.y.max = d.max;
         salesChartInstance.update();
@@ -240,7 +250,9 @@
       // Update bar chart
       if (barChartInstance) {
         const bd = barData[currentSalesRange];
+        barChartInstance.data.datasets[0].label = labels.current;
         barChartInstance.data.datasets[0].data = bd.data;
+        barChartInstance.data.datasets[1].label = labels.prev;
         barChartInstance.data.datasets[1].data = bd.prev;
         barChartInstance.options.scales.x.max = bd.max;
         barChartInstance.update();
@@ -279,7 +291,7 @@
           labels: d.labels,
           datasets: [
             {
-              label: '去年',
+              label: comparisonLabels[currentSalesRange].prev,
               data: d.prev,
               backgroundColor: '#a0d4db',
               borderRadius: 3,
@@ -287,7 +299,7 @@
               categoryPercentage: 0.7,
             },
             {
-              label: '今年',
+              label: comparisonLabels[currentSalesRange].current,
               data: d.data,
               backgroundColor: '#30a1af',
               borderRadius: 3,
@@ -352,7 +364,7 @@
           labels: ['月', '火', '水', '木', '金'],
           datasets: [
             {
-              label: '今年',
+              label: comparisonLabels[currentSalesRange].current,
               data: bd.data,
               backgroundColor: '#30a1af',
               borderRadius: 3,
@@ -368,7 +380,7 @@
               },
             },
             {
-              label: '去年',
+              label: comparisonLabels[currentSalesRange].prev,
               data: bd.prev,
               backgroundColor: '#a0d4db',
               borderRadius: 3,
