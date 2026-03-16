@@ -423,12 +423,12 @@
       if (!canvas) return;
       if (clusterInstance) clusterInstance.destroy();
 
-      // Generate cluster data
-      function genCluster(cx, cy, n, sx, sy) {
+      // Generate cluster data (minX clamps x values)
+      function genCluster(cx, cy, n, sx, sy, minX = 0) {
         const pts = [];
         for (let i = 0; i < n; i++) {
           pts.push({
-            x: cx + (Math.random() - 0.5) * sx * 2,
+            x: Math.max(minX, cx + (Math.random() - 0.5) * sx * 2),
             y: cy + (Math.random() - 0.5) * sy * 2,
           });
         }
@@ -441,28 +441,28 @@
           datasets: [
             {
               label: 'ヘビーユーザー',
-              data: genCluster(4.2, 480, 25, 0.6, 80),
+              data: genCluster(4.2, 400, 40, 0.6, 80),
               backgroundColor: 'rgba(58, 175, 185, 0.8)',
               pointRadius: 6,
               pointHoverRadius: 9,
             },
             {
               label: 'ランチ常連',
-              data: genCluster(3.0, 450, 40, 0.8, 90),
+              data: genCluster(3.0, 500, 25, 0.8, 90),
               backgroundColor: 'rgba(228, 108, 68, 0.8)',
               pointRadius: 6,
               pointHoverRadius: 9,
             },
             {
               label: '軽食派',
-              data: genCluster(1.5, 300, 35, 0.5, 150),
+              data: genCluster(2.2, 300, 12, 0.5, 150, 1.6),
               backgroundColor: 'rgba(234, 192, 68, 0.8)',
               pointRadius: 6,
               pointHoverRadius: 9,
             },
             {
               label: '不定期利用',
-              data: genCluster(0.8, 720, 20, 0.4, 100),
+              data: genCluster(1.3, 720, 20, 0.3, 100, 1),
               backgroundColor: 'rgba(190, 196, 202, 0.8)',
               pointRadius: 6,
               pointHoverRadius: 9,
