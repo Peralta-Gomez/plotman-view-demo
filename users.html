@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<!--
+  © 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.
+-->
+<html lang="en" style="overflow:hidden;background:#f3f4f6"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Analytics - Shokudoraku</title>
+<script src="components/viewport-scale.js"></script>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Font Awesome for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&display=swap" rel="stylesheet"/>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#30a1af',
+            primaryDark: '#2b8f9c',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #f3f4f6;
+      font-family: 'BIZ UDGothic', 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .sidebar-transition {
+      transition: all 0.3s ease-in-out;
+    }
+    .chart-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="flex flex-col overflow-hidden w-[1920px] h-[1080px] mx-auto shadow-2xl relative bg-white">
+<!-- BEGIN: TopBar -->
+<div id="shared-header"></div>
+<!-- END: TopBar -->
+<div class="flex flex-1 overflow-hidden">
+<!-- BEGIN: LeftSidebar -->
+<div id="shared-sidebar"></div>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 overflow-hidden p-4 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
+<div class="flex gap-4 w-full flex-1 min-h-0">
+<!-- LEFT COLUMN (7/12) -->
+<div class="flex flex-col gap-4 min-h-0" style="width: 58.33%;">
+  <!-- 4 Metric Cards -->
+  <div class="grid grid-cols-4 gap-3 flex-shrink-0">
+    <section class="bg-white py-4 px-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+      <div class="flex items-center justify-between mb-1">
+        <p class="text-sm text-gray-500 font-medium">本日の来客数</p>
+        <i class="fa-solid fa-user text-primary text-lg"></i>
+      </div>
+      <h3 class="text-3xl font-bold text-gray-900">90</h3>
+      <div class="flex items-center gap-1 text-emerald-600 text-xs font-bold mt-1">
+        <i class="fa-solid fa-arrow-up text-[10px]"></i> 12.5%
+        <span class="text-gray-400 font-normal">前日比</span>
+      </div>
+    </section>
+    <section class="bg-white py-4 px-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+      <div class="flex items-center justify-between mb-1">
+        <p class="text-sm text-gray-500 font-medium">昨日の来客数</p>
+        <i class="fa-solid fa-user-clock text-gray-400 text-lg"></i>
+      </div>
+      <h3 class="text-3xl font-bold text-gray-900">80</h3>
+      <p class="text-xs text-gray-400 mt-1">前日</p>
+    </section>
+    <section class="bg-white py-4 px-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+      <div class="flex items-center justify-between mb-1">
+        <p class="text-sm text-gray-500 font-medium">今月の来客数</p>
+        <i class="fa-solid fa-calendar text-primary text-lg"></i>
+      </div>
+      <h3 class="text-3xl font-bold text-gray-900">302</h3>
+      <div class="flex items-center gap-1 text-red-500 text-xs font-bold mt-1">
+        <i class="fa-solid fa-arrow-down text-[10px]"></i> 3.2%
+        <span class="text-gray-400 font-normal">前月比</span>
+      </div>
+    </section>
+    <section class="bg-white py-4 px-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+      <div class="flex items-center justify-between mb-1">
+        <p class="text-sm text-gray-500 font-medium">先月の来客数</p>
+        <i class="fa-solid fa-calendar-check text-gray-400 text-lg"></i>
+      </div>
+      <h3 class="text-3xl font-bold text-gray-900">400</h3>
+      <p class="text-xs text-gray-400 mt-1">前月</p>
+    </section>
+  </div>
+
+  <!-- Daily line chart -->
+  <section class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col flex-1 min-h-0" data-purpose="daily-chart">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-xl font-bold text-gray-800">来客数推移</h2>
+      <div class="flex gap-2" id="dailyBtns">
+        <button class="px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 text-gray-500" data-range="week" onclick="switchDailyRange('week')">週</button>
+        <button class="px-3 py-1 text-xs font-bold rounded-lg bg-primary text-white" data-range="month" onclick="switchDailyRange('month')">月</button>
+      </div>
+    </div>
+    <div class="chart-container flex-1 relative">
+      <canvas id="dailyChart"></canvas>
+    </div>
+  </section>
+
+  <!-- Frequency chart + 2 metric cards -->
+  <div class="flex gap-4 flex-[0.6] min-h-0">
+    <section class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col flex-1 min-h-0" data-purpose="frequency-chart">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-xl font-bold text-gray-800">週間来店頻度</h2>
+      </div>
+      <div class="chart-container flex-1 relative">
+        <canvas id="frequencyChart"></canvas>
+      </div>
+    </section>
+    <div class="flex flex-col gap-4" style="width: 40%;">
+      <section class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
+        <div class="flex items-center justify-between mb-1">
+          <p class="text-sm text-gray-500 font-medium">平均注文数</p>
+          <i class="fa-solid fa-utensils text-primary text-lg"></i>
+        </div>
+        <h3 class="text-3xl font-bold text-gray-900">4.5 <span class="text-lg font-normal text-gray-400">皿</span></h3>
+        <div class="flex items-center gap-1 text-emerald-600 text-xs font-bold mt-1">
+          <i class="fa-solid fa-arrow-up text-[10px]"></i> 0.3
+          <span class="text-gray-400 font-normal">前月比</span>
+        </div>
+      </section>
+      <section class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center flex-1">
+        <div class="flex items-center justify-between mb-1">
+          <p class="text-sm text-gray-500 font-medium">平均利用額</p>
+          <i class="fa-solid fa-yen-sign text-primary text-lg"></i>
+        </div>
+        <h3 class="text-3xl font-bold text-gray-900">¥442</h3>
+        <div class="flex items-center gap-1 text-emerald-600 text-xs font-bold mt-1">
+          <i class="fa-solid fa-arrow-up text-[10px]"></i> 5.2%
+          <span class="text-gray-400 font-normal">前月比</span>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT COLUMN (5/12) -->
+<div class="flex flex-col gap-4 min-h-0" style="width: 41.67%;">
+  <!-- Hourly chart -->
+  <section class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col flex-1 min-h-0" data-purpose="hourly-chart">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-xl font-bold text-gray-800">時間帯別来客数</h2>
+      <div class="flex gap-2" id="hourlyBtns">
+        <button class="px-3 py-1 text-xs font-bold rounded-lg bg-primary text-white" data-range="today" onclick="switchHourlyRange('today')">今日</button>
+        <button class="px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 text-gray-500" data-range="avg" onclick="switchHourlyRange('avg')">平均</button>
+      </div>
+    </div>
+    <div class="chart-container flex-1 relative">
+      <canvas id="hourlyChart"></canvas>
+    </div>
+  </section>
+
+  <!-- Cluster chart -->
+  <section class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col flex-[2] min-h-0" data-purpose="cluster-chart">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-xl font-bold text-gray-800">顧客クラスター分析</h2>
+    </div>
+    <div class="chart-container flex-1 relative">
+      <canvas id="clusterChart"></canvas>
+    </div>
+  </section>
+</div>
+</div>
+<!-- BEGIN: Footer -->
+<footer class="mt-auto py-3 border-t border-gray-200 bg-gray-50 flex-shrink-0 flex items-center justify-center" data-purpose="footer">
+<p class="text-xs text-gray-500 font-medium text-center w-full">© 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.</p>
+</footer>
+<!-- END: Footer -->
+</main>
+<!-- END: MainContent -->
+</div>
+<!-- Shared Components -->
+<script src="components/header.js"></script>
+<script src="components/sidebar.js"></script>
+<script src="components/chatbot.js"></script>
+<!-- Charts Script -->
+<script>
+    Chart.register(ChartDataLabels);
+    Chart.defaults.plugins.datalabels.display = false;
+
+    // === Clients Served Per Day (Line Chart) ===
+    const dailyData = {
+      'week': {
+        labels: ['月', '火', '水', '木', '金'],
+        data: [82, 95, 78, 88, 110],
+        prev: [75, 88, 85, 80, 102],
+      },
+      'month': {
+        labels: Array.from({length: 22}, (_, i) => (i+1) + ''),
+        data: [78,92,85,68,95,80,96,102,75,89,94,70,105,98,82,90,108,72,86,91,112,95],
+        prev: [72,85,80,62,88,75,90,95,70,82,88,65,98,92,76,84,100,68,80,85,105,88],
+      },
+    };
+    let currentDailyRange = 'month';
+
+    function switchDailyRange(range) {
+      currentDailyRange = range;
+      document.querySelectorAll('#dailyBtns button').forEach(btn => {
+        btn.className = btn.dataset.range === range
+          ? 'px-3 py-1 text-xs font-bold rounded-lg bg-primary text-white'
+          : 'px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 text-gray-500';
+      });
+      if (dailyInstance) {
+        const d = dailyData[currentDailyRange];
+        dailyInstance.data.labels = d.labels;
+        dailyInstance.data.datasets[0].data = d.data;
+        dailyInstance.data.datasets[1].data = d.prev;
+        dailyInstance.update();
+        return;
+      }
+      drawDailyChart();
+    }
+
+    let dailyInstance = null;
+    function drawDailyChart() {
+      const canvas = document.getElementById('dailyChart');
+      if (!canvas) return;
+      if (dailyInstance) dailyInstance.destroy();
+      const d = dailyData[currentDailyRange];
+      dailyInstance = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: d.labels,
+          datasets: [
+            {
+              label: '今期',
+              data: d.data,
+              borderColor: '#30a1af',
+              backgroundColor: function(context) {
+                const chart = context.chart;
+                const { ctx, chartArea } = chart;
+                if (!chartArea) return 'rgba(48,161,175,0.1)';
+                const grad = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                grad.addColorStop(0, 'rgba(48, 161, 175, 0.2)');
+                grad.addColorStop(1, 'rgba(48, 161, 175, 0)');
+                return grad;
+              },
+              fill: true,
+              tension: 0.4,
+              borderWidth: 2.5,
+              pointRadius: 2,
+              pointHoverRadius: 5,
+            },
+            {
+              label: '前期',
+              data: d.prev,
+              borderColor: '#a0d4db',
+              borderDash: [5, 5],
+              tension: 0.4,
+              borderWidth: 1.5,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: false,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'bottom', labels: { padding: 8, usePointStyle: true, font: { size: 11 } } },
+            tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '人' } }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: '#9ca3af', font: { size: 12 } },
+              grid: { color: '#f3f4f6' }
+            },
+            x: {
+              ticks: { color: '#9ca3af', font: { size: 11 }, maxRotation: 0 },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // === Clients Per Hour (Bar Chart) ===
+    const hourlyLabels = ['10:00','10:20','10:40','11:00','11:20','11:40','12:00','12:20','12:40','13:00','13:20','13:40','14:00','14:20','14:40','15:00','15:20','15:40'];
+    const hourlyData = {
+      'today': {
+        labels: hourlyLabels,
+        data: [0, 0, 0, 0, 18, 28, 38, 48, 20, 15, 22, 35, 25, 15, 5, 2, 0, 0],
+      },
+      'avg': {
+        labels: hourlyLabels,
+        data: [0, 0, 0, 0, 14, 30, 36, 45, 20, 12, 20, 32, 22, 13, 9, 6, 3, 0],
+      },
+    };
+    let currentHourlyRange = 'today';
+
+    function switchHourlyRange(range) {
+      currentHourlyRange = range;
+      document.querySelectorAll('#hourlyBtns button').forEach(btn => {
+        btn.className = btn.dataset.range === range
+          ? 'px-3 py-1 text-xs font-bold rounded-lg bg-primary text-white'
+          : 'px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 text-gray-500';
+      });
+      if (hourlyInstance) {
+        const d = hourlyData[currentHourlyRange];
+        hourlyInstance.data.labels = d.labels;
+        hourlyInstance.data.datasets[0].data = d.data;
+        hourlyInstance.data.datasets[0].backgroundColor = d.data.map(v => v >= 40 ? '#2b8f9c' : v >= 20 ? '#30a1af' : '#a0d4db');
+        hourlyInstance.update();
+        return;
+      }
+      drawHourlyChart();
+    }
+
+    let hourlyInstance = null;
+    function drawHourlyChart() {
+      const canvas = document.getElementById('hourlyChart');
+      if (!canvas) return;
+      if (hourlyInstance) hourlyInstance.destroy();
+      const d = hourlyData[currentHourlyRange];
+      hourlyInstance = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: d.labels,
+          datasets: [{
+            label: '来客数',
+            data: d.data,
+            backgroundColor: d.data.map(v => v >= 40 ? '#2b8f9c' : v >= 20 ? '#30a1af' : '#a0d4db'),
+            borderRadius: 4,
+            barPercentage: 0.7,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ctx.parsed.y + '人' } },
+            datalabels: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: '#9ca3af', font: { size: 12 } },
+              grid: { color: '#f3f4f6' }
+            },
+            x: {
+              ticks: { color: '#9ca3af', font: { size: 11 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // === Visit Frequency (Bar Chart) ===
+    let frequencyInstance = null;
+    function drawFrequencyChart() {
+      const canvas = document.getElementById('frequencyChart');
+      if (!canvas) return;
+      if (frequencyInstance) frequencyInstance.destroy();
+      frequencyInstance = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: ['4回以上', '3回', '1回', '2回'],
+          datasets: [{
+            label: '利用者数',
+            data: [185, 120, 95, 60],
+            backgroundColor: ['rgba(58,175,185,0.8)', 'rgba(228,108,68,0.8)', 'rgba(190,196,202,0.8)', 'rgba(234,192,68,0.8)'],
+            borderRadius: 4,
+            barPercentage: 0.6,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ctx.parsed.y + '人' } },
+            datalabels: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: '利用者数（人）', color: '#9ca3af', font: { size: 12 } },
+              ticks: { color: '#9ca3af', font: { size: 12 } },
+              grid: { color: '#f3f4f6' }
+            },
+            x: {
+              title: { display: true, text: '週間来店回数', color: '#9ca3af', font: { size: 12 } },
+              ticks: { color: '#6b7280', font: { size: 13, weight: '500' } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // === Customer Cluster Analysis (Scatter Chart) ===
+    let clusterInstance = null;
+    function drawClusterChart() {
+      const canvas = document.getElementById('clusterChart');
+      if (!canvas) return;
+      if (clusterInstance) clusterInstance.destroy();
+
+      // Generate cluster data
+      function genCluster(cx, cy, n, sx, sy) {
+        const pts = [];
+        for (let i = 0; i < n; i++) {
+          pts.push({
+            x: cx + (Math.random() - 0.5) * sx * 2,
+            y: cy + (Math.random() - 0.5) * sy * 2,
+          });
+        }
+        return pts;
+      }
+
+      clusterInstance = new Chart(canvas, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'ヘビーユーザー',
+              data: genCluster(4.2, 480, 25, 0.6, 80),
+              backgroundColor: 'rgba(58, 175, 185, 0.8)',
+              pointRadius: 6,
+              pointHoverRadius: 9,
+            },
+            {
+              label: 'ランチ常連',
+              data: genCluster(3.0, 450, 40, 0.8, 90),
+              backgroundColor: 'rgba(228, 108, 68, 0.8)',
+              pointRadius: 6,
+              pointHoverRadius: 9,
+            },
+            {
+              label: '軽食派',
+              data: genCluster(1.5, 300, 35, 0.5, 150),
+              backgroundColor: 'rgba(234, 192, 68, 0.8)',
+              pointRadius: 6,
+              pointHoverRadius: 9,
+            },
+            {
+              label: '不定期利用',
+              data: genCluster(0.8, 720, 20, 0.4, 100),
+              backgroundColor: 'rgba(190, 196, 202, 0.8)',
+              pointRadius: 6,
+              pointHoverRadius: 9,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'bottom', labels: { padding: 10, usePointStyle: true, pointStyle: 'circle', font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.dataset.label + ' - 来店: ' + ctx.parsed.x.toFixed(1) + '回/週, 支出: ¥' + Math.round(ctx.parsed.y)
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: '週間来店回数', color: '#9ca3af', font: { size: 12 } },
+              ticks: { color: '#9ca3af', font: { size: 12 } },
+              grid: { color: '#f3f4f6' },
+              min: 0,
+              max: 6,
+            },
+            y: {
+              title: { display: true, text: '平均支出（円）', color: '#9ca3af', font: { size: 12 } },
+              ticks: {
+                color: '#9ca3af',
+                font: { size: 12 },
+                callback: v => '¥' + v,
+              },
+              grid: { color: '#f3f4f6' },
+              min: 100,
+              max: 900,
+            }
+          }
+        }
+      });
+    }
+
+    window.onload = () => {
+      loadHeader();
+      loadSidebar('users');
+      loadChatbot();
+      drawDailyChart();
+      drawHourlyChart();
+      drawFrequencyChart();
+      drawClusterChart();
+    };
+  </script>
+</body></html>

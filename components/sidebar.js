@@ -7,6 +7,7 @@ function loadSidebar(activePage) {
     { id: 'items', icon: 'fa-magnifying-glass-chart', label: '商品詳細', href: 'item_details.html' },
     // { id: 'inventory', icon: 'fa-boxes-stacked', label: '在庫管理', href: '#' },
     { id: 'survey', icon: 'fa-clipboard-list', label: 'アンケート', href: 'survey.html' },
+    { id: 'users', icon: 'fa-users', label: 'ユーザー分析', href: 'users.html' },
   ];
 
   const navLinks = pages.map(p => {
