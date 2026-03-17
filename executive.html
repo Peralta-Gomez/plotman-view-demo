@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<!--
+  © 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.
+-->
+<html lang="ja" style="overflow:hidden;background:#f3f4f6"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>経営サマリー - Shokudoraku</title>
+<script src="components/viewport-scale.js"></script>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Font Awesome for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&display=swap" rel="stylesheet"/>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#30a1af',
+            primaryDark: '#2b8f9c',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-layout">
+    body {
+      background-color: #f3f4f6;
+      font-family: 'BIZ UDGothic', 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .sidebar-transition {
+      transition: all 0.3s ease-in-out;
+    }
+    .chart-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body class="flex flex-col overflow-hidden w-[1920px] h-[1080px] mx-auto shadow-2xl relative bg-white">
+<!-- BEGIN: TopBar -->
+<div id="shared-header"></div>
+<!-- END: TopBar -->
+<div class="flex flex-1 overflow-hidden">
+<!-- BEGIN: LeftSidebar -->
+<div id="shared-sidebar"></div>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 overflow-hidden p-6 bg-gray-50 flex flex-col h-full" data-purpose="dashboard-container">
+
+<!-- Page Title -->
+<div class="mb-5">
+  <h1 class="text-3xl font-bold text-gray-800">経営サマリー</h1>
+  <p class="text-lg text-gray-400 mt-1">主要指標の概要</p>
+</div>
+
+<div class="grid grid-cols-12 gap-5 flex-1 min-h-0" style="grid-template-rows: auto 1fr;">
+
+<!-- ROW 1: 4 Big KPI Cards -->
+<section class="col-span-3 bg-white px-5 py-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-11 h-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+      <i class="fa-solid fa-yen-sign text-xl"></i>
+    </div>
+    <p class="text-base text-gray-500 font-bold">月間売上</p>
+  </div>
+  <p class="text-4xl font-bold text-gray-900">¥30万</p>
+  <div class="flex items-center gap-2 mt-1">
+    <span class="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg text-sm font-bold">
+      <i class="fa-solid fa-arrow-up text-xs"></i> +8.2%
+    </span>
+    <span class="text-sm text-gray-400">前月比</span>
+  </div>
+</section>
+
+<section class="col-span-3 bg-white px-5 py-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-11 h-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+      <i class="fa-solid fa-users text-xl"></i>
+    </div>
+    <p class="text-base text-gray-500 font-bold">1日平均来客数</p>
+  </div>
+  <p class="text-4xl font-bold text-gray-900">70名</p>
+  <div class="flex items-center gap-2 mt-1">
+    <span class="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg text-sm font-bold">
+      <i class="fa-solid fa-arrow-up text-xs"></i> +3.0%
+    </span>
+    <span class="text-sm text-gray-400">前月比</span>
+  </div>
+</section>
+
+<section class="col-span-3 bg-white px-5 py-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-11 h-11 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center flex-shrink-0">
+      <i class="fa-solid fa-star text-xl"></i>
+    </div>
+    <p class="text-base text-gray-500 font-bold">顧客満足度</p>
+  </div>
+  <p class="text-4xl font-bold text-gray-900">4.2 <span class="text-xl font-normal text-gray-400">/ 5</span></p>
+  <div class="flex items-center gap-2 mt-1">
+    <span class="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg text-sm font-bold">
+      <i class="fa-solid fa-arrow-up text-xs"></i> +0.2
+    </span>
+    <span class="text-sm text-gray-400">前月比</span>
+  </div>
+</section>
+
+<section class="col-span-3 bg-white px-5 py-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-11 h-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+      <i class="fa-solid fa-receipt text-xl"></i>
+    </div>
+    <p class="text-base text-gray-500 font-bold">平均取引額</p>
+  </div>
+  <p class="text-4xl font-bold text-gray-900">¥402</p>
+  <div class="flex items-center gap-2 mt-1">
+    <span class="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg text-sm font-bold">
+      <i class="fa-solid fa-arrow-up text-xs"></i> +2.1%
+    </span>
+    <span class="text-sm text-gray-400">前月比</span>
+  </div>
+</section>
+
+<!-- ROW 2: Satisfaction Trend (large) + Category Pie -->
+<section class="col-span-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="satisfaction-trend">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4">満足度推移（年間）</h2>
+  <div class="chart-container flex-1 relative">
+    <canvas id="satisfactionChart"></canvas>
+  </div>
+</section>
+
+<section class="col-span-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col" data-purpose="payment-breakdown">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4">決済方法別売上</h2>
+  <div class="chart-container flex-1 relative">
+    <canvas id="paymentChart"></canvas>
+  </div>
+</section>
+
+</div>
+
+<!-- BEGIN: Footer -->
+<footer class="mt-auto py-3 border-t border-gray-200 bg-gray-50 flex-shrink-0 flex items-center justify-center" data-purpose="footer">
+<p class="text-xs text-gray-500 font-medium text-center w-full">© 2023 Shokudoraku Cafeteria Systems. All rights reserved. Data confidential.</p>
+</footer>
+<!-- END: Footer -->
+</main>
+<!-- END: MainContent -->
+</div>
+<!-- Shared Components -->
+<script src="components/header.js"></script>
+<script src="components/sidebar.js"></script>
+<script src="components/chatbot.js"></script>
+<!-- Charts Script -->
+<script>
+    Chart.defaults.responsive = false;
+    Chart.register(ChartDataLabels);
+    Chart.defaults.plugins.datalabels = { display: false };
+
+    function sizeCanvas(canvas) {
+      const parent = canvas.parentElement;
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
+    }
+
+    // Payment Method Doughnut
+    function drawPaymentChart() {
+      const canvas = document.getElementById('paymentChart');
+      if (!canvas) return;
+      sizeCanvas(canvas);
+      new Chart(canvas, {
+        type: 'doughnut',
+        data: {
+          labels: ['食堂楽Pay', '社員証', '現金', 'その他'],
+          datasets: [{
+            data: [35, 30, 25, 10],
+            backgroundColor: ['#30a1af', '#e8735a', '#f0b752', '#c4c9d0'],
+            borderWidth: 2,
+            borderColor: '#ffffff',
+          }]
+        },
+        options: {
+          cutout: '55%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 16,
+                usePointStyle: true,
+                pointStyle: 'rectRounded',
+                font: { size: 17, weight: '500' },
+                color: '#6b7280'
+              }
+            },
+            datalabels: {
+              display: true,
+              color: '#fff',
+              font: { size: 18, weight: 'bold' },
+              formatter: (value) => value + '%',
+            }
+          }
+        }
+      });
+    }
+
+    // Satisfaction Trend - Line Chart
+    function drawSatisfactionTrend() {
+      const canvas = document.getElementById('satisfactionChart');
+      if (!canvas) return;
+      sizeCanvas(canvas);
+      new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+          datasets: [{
+            label: '満足度',
+            data: [3.5, 3.6, 3.8, 3.9, 4.0, 4.3, 4.1, 4.2, 4.0, 4.1, 4.3, 4.2],
+            borderColor: '#30a1af',
+            backgroundColor: function(context) {
+              const chart = context.chart;
+              const { ctx, chartArea } = chart;
+              if (!chartArea) return 'rgba(48,161,175,0.1)';
+              const grad = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+              grad.addColorStop(0, 'rgba(48, 161, 175, 0.25)');
+              grad.addColorStop(1, 'rgba(48, 161, 175, 0)');
+              return grad;
+            },
+            fill: true,
+            tension: 0.4,
+            borderWidth: 4,
+            pointBackgroundColor: '#30a1af',
+            pointRadius: 6,
+            pointHoverRadius: 9,
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => '評価: ' + ctx.parsed.y.toFixed(1) + ' / 5'
+              }
+            }
+          },
+          scales: {
+            y: {
+              min: 1,
+              max: 5,
+              ticks: {
+                stepSize: 1,
+                color: '#9ca3af',
+                font: { size: 15 }
+              },
+              grid: { color: '#f3f4f6' }
+            },
+            x: {
+              ticks: { color: '#9ca3af', font: { size: 15 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    window.onload = () => {
+      loadHeader();
+      loadSidebar('executive');
+      loadChatbot();
+      drawPaymentChart();
+      drawSatisfactionTrend();
+    };
+  </script>
+</body></html>
